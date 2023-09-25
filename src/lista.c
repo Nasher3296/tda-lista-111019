@@ -34,10 +34,26 @@ lista_t *lista_crear()
 	return li;
 }
 
-
+/**
+ * Inserta un elemento al final de la lista.
+ *
+ * Devuelve NULL si no pudo insertar el elemento a causa de un error, o la lista en caso de exito.
+ */
 lista_t *lista_insertar(lista_t *lista, void *elemento)
 {
-	return NULL;
+	if(lista == NULL || elemento == NULL) //Si elemento es null quiza deberia retornar la lista(?
+		return NULL;
+
+	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
+
+	if(nuevo_nodo == NULL)
+		return NULL;
+
+	nuevo_nodo->elemento = elemento;
+	lista->nodo_final->siguiente = nuevo_nodo;
+	lista->nodo_final = nuevo_nodo;
+
+	return lista;
 }
 
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
