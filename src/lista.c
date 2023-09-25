@@ -167,9 +167,12 @@ void *lista_ultimo(lista_t *lista)
 	return lista != NULL && lista->nodo_final != NULL ? lista->nodo_final->elemento : NULL;
 }
 
+/**
+ * Devuelve true si la lista está vacía (o no existe) o false en caso contrario.
+ */
 bool lista_vacia(lista_t *lista)
 {
-	return true;
+	return lista == NULL || lista ->nodo_inicio == NULL;
 }
 
 size_t lista_tamanio(lista_t *lista)
