@@ -53,7 +53,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 
 	if(lista->nodo_inicio == NULL && lista->nodo_final != NULL)
 		printf("\nALERTA ROJA ESTO NO DEBERIA HABER PASADO XD\n");
-		
+
 	if(lista->nodo_inicio == NULL) //No puede tener nodo_final == NULL si nodo_inicio == NULL.
 		lista->nodo_inicio = nuevo_nodo;
 	else
@@ -149,14 +149,22 @@ void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
 	return NULL;
 }
 
+/**
+ * Devuelve el primer elemento de la lista o NULL si la lista se
+ * encuentra vacía o no existe.
+ */
 void *lista_primero(lista_t *lista)
 {
-	return NULL;
+	return lista != NULL && lista->nodo_inicio != NULL ? lista->nodo_inicio->elemento : NULL;
 }
 
+/**
+ * Devuelve el último elemento de la lista o NULL si la lista se
+ * encuentra vacía o no existe.
+ */
 void *lista_ultimo(lista_t *lista)
 {
-	return NULL;
+	return lista != NULL && lista->nodo_final != NULL ? lista->nodo_final->elemento : NULL;
 }
 
 bool lista_vacia(lista_t *lista)
