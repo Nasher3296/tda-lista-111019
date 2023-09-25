@@ -9,7 +9,7 @@ typedef struct nodo {
 
 struct lista {
 	nodo_t *nodo_inicio;
-	//algo mas?
+	nodo_t *nodo_final;
 };
 
 struct lista_iterador {
@@ -17,10 +17,23 @@ struct lista_iterador {
 	int sarasa;
 };
 
+/**
+ * Crea la lista reservando la memoria necesaria.
+ * Devuelve un puntero a la lista creada o NULL en caso de error.
+ */
 lista_t *lista_crear()
 {
-	return NULL;
+	lista_t *li = malloc(sizeof(lista_t));
+
+	if(li == NULL)
+		return NULL;
+	
+	li->nodo_inicio = NULL;
+	li->nodo_final = NULL;
+
+	return li;
 }
+
 
 lista_t *lista_insertar(lista_t *lista, void *elemento)
 {
