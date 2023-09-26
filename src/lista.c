@@ -25,7 +25,7 @@ lista_t *lista_crear()
 {
 	lista_t *li = malloc(sizeof(lista_t));
 
-	if(li == NULL)
+	if(!li)
 		return NULL;
 	
 	li->nodo_inicio = NULL;
@@ -41,20 +41,20 @@ lista_t *lista_crear()
  */
 lista_t *lista_insertar(lista_t *lista, void *elemento)
 {
-	if(lista == NULL || elemento == NULL) 
+	if(!lista || !elemento) 
 		return NULL;
 
 	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
 
-	if(nuevo_nodo == NULL)
+	if(!nuevo_nodo)
 		return NULL;
 
 	nuevo_nodo->elemento = elemento;
 
-	if(lista->nodo_inicio == NULL && lista->nodo_final != NULL)
+	if(!lista->nodo_inicio && lista->nodo_final)
 		printf("\nALERTA ROJA ESTO NO DEBERIA HABER PASADO XD\n");
 
-	if(lista->nodo_inicio == NULL) //No puede tener nodo_final == NULL si nodo_inicio == NULL.
+	if(!lista->nodo_inicio) //No puede tener nodo_final == NULL si nodo_inicio == NULL.
 		lista->nodo_inicio = nuevo_nodo;
 	else
 		lista->nodo_final->siguiente = nuevo_nodo;
@@ -70,35 +70,35 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 */
 nodo_t *buscar_nodo_anterior_n(nodo_t *nodo_actual, int n)
 {
-	if(nodo_actual == NULL || n <= 0)
+	if(!nodo_actual|| n <= 0)
 		return NULL;
 
 	if(n == 1)
 		return nodo_actual;
 	
-	return	nodo_actual->siguiente != NULL ? 
+	return	nodo_actual->siguiente ? 
 			buscar_nodo_anterior_n(nodo_actual->siguiente, --n) :
 			NULL;
 }
 
 lista_t *lista_insertar_despues(lista_t *lista, nodo_t *nodo_anterior, void *elemento)
 {
-	if(lista == NULL || nodo_anterior == NULL || elemento == NULL) //Si elemento es null quiza deberia retornar la lista(?
+	if(!lista || !nodo_anterior || !elemento) //Si elemento es null quiza deberia retornar la lista(?
 		return NULL;
 
-	if(lista->nodo_inicio == NULL)
+	if(!lista->nodo_inicio)
 		return lista_insertar(lista, elemento);
 
 	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
 
-	if(nuevo_nodo == NULL)
+	if(!nuevo_nodo)
 		return NULL;
 
 	nuevo_nodo->elemento = elemento;
 	nuevo_nodo->siguiente = nodo_anterior->siguiente;
 	nodo_anterior->siguiente = nuevo_nodo;
 
-	if(nuevo_nodo->siguiente == NULL)
+	if(!nuevo_nodo->siguiente)
 		lista->nodo_final = nuevo_nodo;
 
 	return lista;
@@ -114,13 +114,13 @@ lista_t *lista_insertar_despues(lista_t *lista, nodo_t *nodo_anterior, void *ele
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 				    size_t posicion)
 {
-	if(lista == NULL || elemento == NULL) //Entiendo que posicion < 0 se considera como posicion que no existe y no como error
+	if(!lista || !elemento) //Entiendo que posicion < 0 se considera como posicion que no existe y no como error
 		return NULL;
 
 
 	nodo_t *nodo_anterior = buscar_nodo_anterior_n(lista->nodo_inicio, posicion);
 
-	if(nodo_anterior == NULL)
+	if(!nodo_anterior)
 		return lista_insertar(lista, elemento);
 
 	return lista_insertar_despues(lista, nodo_anterior, elemento);
@@ -177,7 +177,7 @@ bool lista_vacia(lista_t *lista)
 
 size_t lista_tamanio(lista_t *lista)
 {
-	return 0;
+	return lista ? lista->tamanio : NULL;
 }
 
 void lista_destruir(lista_t *lista)
