@@ -10,6 +10,7 @@ typedef struct nodo {
 struct lista {
 	nodo_t *nodo_inicio;
 	nodo_t *nodo_final;
+	size_t tamanio;
 };
 
 struct lista_iterador {
@@ -23,7 +24,7 @@ struct lista_iterador {
  */
 lista_t *lista_crear()
 {
-	lista_t *li = malloc(sizeof(lista_t));
+	lista_t *li = calloc(1, sizeof(lista_t));
 
 	if(!li)
 		return NULL;
@@ -61,7 +62,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	
 
 	lista->nodo_final = nuevo_nodo;
-
+	lista->tamanio++;
 
 	return lista;
 }
@@ -100,6 +101,8 @@ lista_t *lista_insertar_despues(lista_t *lista, nodo_t *nodo_anterior, void *ele
 
 	if(!nuevo_nodo->siguiente)
 		lista->nodo_final = nuevo_nodo;
+	
+	lista->tamanio++;
 
 	return lista;
 }
@@ -117,6 +120,8 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 	if(!lista || !elemento) //Entiendo que posicion < 0 se considera como posicion que no existe y no como error
 		return NULL;
 
+	if(posicion > lista->tamanio)
+		return lista_insertar(lista, elemento);
 
 	nodo_t *nodo_anterior = buscar_nodo_anterior_n(lista->nodo_inicio, posicion);
 
@@ -172,7 +177,7 @@ void *lista_ultimo(lista_t *lista)
  */
 bool lista_vacia(lista_t *lista)
 {
-	return lista == NULL || lista ->nodo_inicio == NULL;
+	return lista || lista ->nodo_inicio;
 }
 
 size_t lista_tamanio(lista_t *lista)
