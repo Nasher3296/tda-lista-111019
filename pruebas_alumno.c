@@ -40,6 +40,20 @@ void prueba_insertar_lista(){
 
 	pa2m_afirmar(!lista_vacia(li), "La lista tiene elementos");
 
+	pa2m_afirmar(lista_elemento_en_posicion(li, 0) == &PRIMERO, "El primer elemento es correcto");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 1) == &SEGUNDO, "El segundo elemento es correcto");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 2) == &TERCERO, "El tercer elemento es correcto");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 3) == NULL, "Null si buscamos fuera del rango");
+
+	li_aux = lista_insertar_en_posicion(li,&TERCERO,0);
+	pa2m_afirmar(li_aux != NULL, "Se inserta un nuevo elemento al principio");
+	li = li_aux;
+
+	pa2m_afirmar(lista_elemento_en_posicion(li, 0) != &PRIMERO, "El primer elemento se desplazo");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 1) != &SEGUNDO, "El segundo elemento se desplazo");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 2) != &TERCERO, "El tercer elemento se desplazo");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 3) == &TERCERO, "El llamado TERCERO ahora esta en la 4ta pos");
+	
 }
 
 int main()

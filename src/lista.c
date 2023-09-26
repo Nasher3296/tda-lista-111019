@@ -86,7 +86,7 @@ nodo_t *buscar_nodo_anterior_n(nodo_t *nodo_actual, size_t n)
 
 lista_t *lista_insertar_despues(lista_t *lista, nodo_t *nodo_anterior, void *elemento)
 {
-	if(!lista || !nodo_anterior || !elemento) //Si elemento es null quiza deberia retornar la lista(?
+	if(!lista || !elemento) 
 		return NULL;
 
 	if(!lista->nodo_inicio)
@@ -98,8 +98,13 @@ lista_t *lista_insertar_despues(lista_t *lista, nodo_t *nodo_anterior, void *ele
 		return NULL;
 
 	nuevo_nodo->elemento = elemento;
-	nuevo_nodo->siguiente = nodo_anterior->siguiente;
-	nodo_anterior->siguiente = nuevo_nodo;
+	if(!nodo_anterior){ //Primera pos
+		nuevo_nodo->siguiente = nodo_anterior->siguiente;
+		nodo_anterior->siguiente = nuevo_nodo;
+	} else{
+		nuevo_nodo->siguiente = lista->nodo_inicio;
+		lista->nodo_inicio = nuevo_nodo;
+	}
 
 	if(!nuevo_nodo->siguiente)
 		lista->nodo_final = nuevo_nodo;
@@ -124,6 +129,10 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 
 	if(posicion > lista->tamanio)
 		return lista_insertar(lista, elemento);
+
+	if(posicion == 0){
+
+	}
 
 	nodo_t *nodo_anterior = buscar_nodo_anterior_n(lista->nodo_inicio, posicion);
 
