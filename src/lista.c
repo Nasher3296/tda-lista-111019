@@ -180,17 +180,52 @@ bool lista_vacia(lista_t *lista)
 	return lista || lista ->nodo_inicio;
 }
 
+/**
+ * Devuelve la cantidad de elementos almacenados en la lista.
+ * Una lista que no existe no puede tener elementos.
+ */
 size_t lista_tamanio(lista_t *lista)
 {
-	return lista ? lista->tamanio : NULL;
+	return lista ? lista->tamanio : 0;
 }
 
+/**
+ * Libera la memoria reservada por la lista.
+ */
 void lista_destruir(lista_t *lista)
 {
+	if(!lista)
+		return;
+	nodo_t *nodo_actual = lista->nodo_inicio;
+	nodo_t *nodo_pivote;
+	while(nodo_actual){
+		nodo_pivote = nodo_actual;
+		nodo_actual = nodo_actual->siguiente;
+		free(nodo_pivote);
+	}
+	free(lista);
 }
 
+/**
+ * Libera la memoria reservada por la lista pero además aplica la función
+ * destructora dada (si no es NULL) a cada uno de los elementos presentes en la
+ * lista.
+ */
 void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 {
+	if(!lista)
+		return;
+	nodo_t *nodo_actual = lista->nodo_inicio;
+	nodo_t *nodo_pivote;
+	while(nodo_actual){
+		if(funcion)
+			funcion(nodo_actual->elemento);
+		
+		nodo_pivote = nodo_actual;
+		nodo_actual = nodo_actual->siguiente;
+		free(nodo_pivote);
+	}
+	free(lista);
 }
 
 lista_iterador_t *lista_iterador_crear(lista_t *lista)
