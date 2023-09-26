@@ -1,6 +1,8 @@
 #include "lista.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
+
 
 typedef struct nodo {
 	void *elemento;
@@ -69,7 +71,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 /*
  *Busca el nodo anterior al numero n. En caso de no existir retorna NULL
 */
-nodo_t *buscar_nodo_anterior_n(nodo_t *nodo_actual, int n)
+nodo_t *buscar_nodo_anterior_n(nodo_t *nodo_actual, size_t n)
 {
 	if(!nodo_actual|| n <= 0)
 		return NULL;
