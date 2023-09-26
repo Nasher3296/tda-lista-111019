@@ -179,7 +179,7 @@ void *lista_ultimo(lista_t *lista)
  */
 bool lista_vacia(lista_t *lista)
 {
-	return lista || lista ->nodo_inicio;
+	return !(lista && lista ->nodo_inicio);
 }
 
 /**
