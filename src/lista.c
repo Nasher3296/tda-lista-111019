@@ -131,8 +131,6 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 		return lista_insertar(lista, elemento);
 
 	return lista_insertar_despues(lista, nodo_anterior, elemento);
-
-
 }
 
 void *lista_quitar(lista_t *lista)
@@ -147,7 +145,18 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 {
-	return NULL;
+	if(!lista || posicion >= lista->tamanio)
+		return NULL;
+
+	if(posicion == 0)
+		return lista_primero(lista);
+
+	nodo_t *nodo_anterior = buscar_nodo_anterior_n(lista->nodo_inicio, posicion);
+
+	if(!nodo_anterior)
+		return NULL;
+
+	return nodo_anterior->siguiente->elemento;
 }
 
 void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
