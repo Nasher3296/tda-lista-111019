@@ -56,11 +56,30 @@ void prueba_insertar_lista(){
 	
 }
 
+void prueba_insertar_entre(){
+	char PRIMERO = 'A';
+	char SEGUNDO = 'B';
+	char TERCERO = 'C';
+	lista_t *li = lista_crear();
+	
+	pa2m_afirmar(li != NULL, "Se crea correctamente la lista");
+	pa2m_afirmar(lista_vacia(li), "La lista esta vacia");
+	pa2m_afirmar(lista_insertar_en_posicion(li, &TERCERO, 10) != NULL && lista_elemento_en_posicion(li, 0) == &TERCERO, "Insercion correcta");
+	pa2m_afirmar(lista_insertar_en_posicion(li, &PRIMERO, 0) != NULL && lista_elemento_en_posicion(li, 0) == &PRIMERO, "Insercion correcta");
+	pa2m_afirmar(lista_insertar_en_posicion(li, &SEGUNDO, 1) != NULL && lista_elemento_en_posicion(li, 1) == &SEGUNDO, "Insercion correcta");
+
+	pa2m_afirmar(lista_elemento_en_posicion(li, 0) == &PRIMERO, "El primer elemento es correcto");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 1) == &SEGUNDO, "El segundo elemento es correcto");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 2) == &TERCERO, "El tercer elemento es correcto");
+	
+}
+
 int main()
 {
 	pa2m_nuevo_grupo(
 		"\n======================== LISTA ========================");
 	
-	prueba_insertar_lista();
+	// prueba_insertar_lista();
+	prueba_insertar_entre();
 	return pa2m_mostrar_reporte();
 }

@@ -37,6 +37,18 @@ lista_t *lista_crear()
 	return li;
 }
 
+nodo_t *nuevo_nodo_cargado(void *elemento){
+	if(!elemento)
+		return NULL;
+
+	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
+
+	if(!nuevo_nodo)
+		return NULL;
+
+	nuevo_nodo->elemento = elemento;
+	return nuevo_nodo;
+}
 /**
  * Inserta un elemento al final de la lista.
  *
@@ -47,17 +59,13 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	if(!lista || !elemento) 
 		return NULL;
 
-	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
+	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento);
 
 	if(!nuevo_nodo)
 		return NULL;
 
-	nuevo_nodo->elemento = elemento;
 
-	if(!lista->nodo_inicio && lista->nodo_final)
-		printf("\nALERTA ROJA ESTO NO DEBERIA HABER PASADO XD\n");
-
-	if(!lista->nodo_inicio) //No puede tener nodo_final == NULL si nodo_inicio == NULL.
+	if(!lista->nodo_inicio) 
 		lista->nodo_inicio = nuevo_nodo;
 	else
 		lista->nodo_final->siguiente = nuevo_nodo;
@@ -68,52 +76,38 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 
 	return lista;
 }
-/*
- *Busca el nodo anterior al numero n. En caso de no existir retorna NULL
-*/
-nodo_t *buscar_nodo_anterior_n(nodo_t *nodo_actual, size_t n)
-{
-	if(!nodo_actual|| n <= 0)
-		return NULL;
 
-	if(n == 1)
-		return nodo_actual;
+lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
+	if(!li || !elemento)
+		return NULL;
 	
-	return	nodo_actual->siguiente ? 
-			buscar_nodo_anterior_n(nodo_actual->siguiente, --n) :
-			NULL;
-}
-
-lista_t *lista_insertar_despues(lista_t *lista, nodo_t *nodo_anterior, void *elemento)
-{
-	if(!lista || !elemento) 
-		return NULL;
-
-	if(!lista->nodo_inicio)
-		return lista_insertar(lista, elemento);
-
-	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
+	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento);
 
 	if(!nuevo_nodo)
 		return NULL;
 
-	nuevo_nodo->elemento = elemento;
-	if(!nodo_anterior){ //Primera pos
-		nuevo_nodo->siguiente = nodo_anterior->siguiente;
-		nodo_anterior->siguiente = nuevo_nodo;
-	} else{
-		nuevo_nodo->siguiente = lista->nodo_inicio;
-		lista->nodo_inicio = nuevo_nodo;
-	}
-
-	if(!nuevo_nodo->siguiente)
-		lista->nodo_final = nuevo_nodo;
+	nuevo_nodo->siguiente = li->nodo_inicio;
+	li->nodo_inicio = nuevo_nodo;
+	li->tamanio++;
 	
-	lista->tamanio++;
-
-	return lista;
+	return li;
 }
 
+lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
+	if(!li || !elemento)
+		return NULL;
+	
+	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento);
+
+	if(!nuevo_nodo)
+		return NULL;
+
+	nuevo_nodo->siguiente = nodo_anterior->siguiente;
+	nodo_anterior->siguiente = nuevo_nodo;
+	li->tamanio++;
+
+	return li;	
+}
 /**
  * Inserta un elemento en la posicion indicada, donde 0 es insertar
  * como primer elemento y 1 es insertar luego del primer elemento.  
@@ -121,6 +115,19 @@ lista_t *lista_insertar_despues(lista_t *lista, nodo_t *nodo_anterior, void *ele
  *
  * Devuelve NULL si no pudo insertar el elemento a causa de un error, o la lista en caso de exito.
  */
+
+nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
+	if(!li || posicion > li->tamanio)
+		return NULL;
+
+	nodo_t *nodo_anterior = li->nodo_inicio;
+	size_t i = 0;
+	while(i++ < posicion)
+		nodo_anterior = nodo_anterior->siguiente;
+	return nodo_anterior;
+	
+}
+
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 				    size_t posicion)
 {
@@ -130,16 +137,12 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 	if(posicion > lista->tamanio)
 		return lista_insertar(lista, elemento);
 
-	if(posicion == 0){
+	if(posicion == 0)
+		return insertar_primer_lugar(lista,elemento);
 
-	}
-
-	nodo_t *nodo_anterior = buscar_nodo_anterior_n(lista->nodo_inicio, posicion);
-
-	if(!nodo_anterior)
-		return lista_insertar(lista, elemento);
-
-	return lista_insertar_despues(lista, nodo_anterior, elemento);
+	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
+	
+	return insertar_entre(lista, nodo_anterior, elemento);
 }
 
 void *lista_quitar(lista_t *lista)
@@ -156,14 +159,12 @@ void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 {
 	if(!lista || posicion >= lista->tamanio)
 		return NULL;
-
+	
 	if(posicion == 0)
-		return lista_primero(lista);
+		return lista->nodo_inicio->elemento;
 
-	nodo_t *nodo_anterior = buscar_nodo_anterior_n(lista->nodo_inicio, posicion);
-
-	if(!nodo_anterior)
-		return NULL;
+	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
+	
 
 	return nodo_anterior->siguiente->elemento;
 }
