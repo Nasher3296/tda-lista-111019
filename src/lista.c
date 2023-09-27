@@ -121,7 +121,7 @@ lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
  */
 
 nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
-	if(!li || posicion > li->tamanio)
+	if(!li || posicion > li->tamanio || posicion == 0) //No hay anterior al primero
 		return NULL;
 
 	nodo_t *nodo_anterior = li->nodo_inicio;
@@ -129,7 +129,6 @@ nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
 	while(++i < posicion)
 		nodo_anterior = nodo_anterior->siguiente;
 	return nodo_anterior;
-	
 }
 
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
@@ -148,9 +147,25 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 	return insertar_entre(lista, nodo_anterior, elemento);
 }
 
+/**
+ * Quita de la lista el elemento que se encuentra en la ultima posición.
+ *
+ * Devuelve el elemento removido de la lista o NULL en caso de error.
+ */
 void *lista_quitar(lista_t *lista)
 {
-	return NULL;
+	if(!lista || !lista->nodo_final)
+		return NULL;
+	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, lista->tamanio );
+	if(!nodo_anterior)
+		return NULL;
+
+	void *elemento = nodo_anterior->elemento;
+
+	lista->tamanio--;
+	lista->nodo_final = nodo_anterior; 
+	free(lista->nodo_final);
+	return elemento;	
 }
 
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
@@ -184,7 +199,7 @@ void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
  */
 void *lista_primero(lista_t *lista)
 {
-	return lista != NULL && lista->nodo_inicio != NULL ? lista->nodo_inicio->elemento : NULL;
+	return lista && lista->nodo_inicio ? lista->nodo_inicio->elemento : NULL;
 }
 
 /**
@@ -193,7 +208,7 @@ void *lista_primero(lista_t *lista)
  */
 void *lista_ultimo(lista_t *lista)
 {
-	return lista != NULL && lista->nodo_final != NULL ? lista->nodo_final->elemento : NULL;
+	return lista && lista->nodo_final ? lista->nodo_final->elemento : NULL;
 }
 
 /**
@@ -218,16 +233,7 @@ size_t lista_tamanio(lista_t *lista)
  */
 void lista_destruir(lista_t *lista)
 {
-	if(!lista)
-		return;
-	nodo_t *nodo_actual = lista->nodo_inicio;
-	nodo_t *nodo_pivote;
-	while(nodo_actual){
-		nodo_pivote = nodo_actual;
-		nodo_actual = nodo_actual->siguiente;
-		free(nodo_pivote);
-	}
-	free(lista);
+	lista_destruir_todo(lista, NULL);
 }
 
 /**

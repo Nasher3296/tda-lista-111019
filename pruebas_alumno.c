@@ -74,12 +74,26 @@ void prueba_insertar_entre(){
 	
 }
 
+void prueba_quitar_uno(){
+	char PRIMERO = 'A';
+	char SEGUNDO = 'B';
+	char TERCERO = 'C';
+	lista_t *li = lista_crear();
+	
+	lista_insertar_en_posicion(li, &TERCERO, 10);
+	lista_insertar_en_posicion(li, &PRIMERO, 0);
+	lista_insertar_en_posicion(li, &SEGUNDO, 1);
+	void *e = lista_quitar(li);	
+	pa2m_afirmar(e == &TERCERO,"Elemento quitado == TERCERO");
+}
+
 int main()
 {
 	pa2m_nuevo_grupo(
 		"\n======================== LISTA ========================");
 	
-	prueba_insertar_lista();
-	prueba_insertar_entre();
+	// prueba_insertar_lista();
+	// prueba_insertar_entre();
+	prueba_quitar_uno();
 	return pa2m_mostrar_reporte();
 }
