@@ -14,7 +14,8 @@ pruebas_chanutron: src/*.c pruebas_chanutron.o
 valgrind-alumno: src/*.c pruebas_alumno.o
 	clear
 	$(CC) $(CFLAGS) src/*.c pruebas_alumno.o -o pruebas_alumno
-	./pruebas_alumno
+	valgrind $(VALGRIND_FLAGS) ./pruebas_alumno
+	# ./pruebas_alumno
 
 pruebas_alumno: src/*.c pruebas_alumno.c
 	$(CC) $(CFLAGS) src/*.c pruebas_alumno.c -o pruebas_alumno

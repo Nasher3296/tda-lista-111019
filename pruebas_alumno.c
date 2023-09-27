@@ -53,7 +53,7 @@ void prueba_insertar_lista(){
 	pa2m_afirmar(lista_elemento_en_posicion(li, 1) != &SEGUNDO, "El segundo elemento se desplazo");
 	pa2m_afirmar(lista_elemento_en_posicion(li, 2) != &TERCERO, "El tercer elemento se desplazo");
 	pa2m_afirmar(lista_elemento_en_posicion(li, 3) == &TERCERO, "El llamado TERCERO ahora esta en la 4ta pos");
-	
+	lista_destruir(li);
 }
 
 void prueba_insertar_entre(){
@@ -71,6 +71,7 @@ void prueba_insertar_entre(){
 	pa2m_afirmar(lista_elemento_en_posicion(li, 0) == &PRIMERO, "El primer elemento es correcto");
 	pa2m_afirmar(lista_elemento_en_posicion(li, 1) == &SEGUNDO, "El segundo elemento es correcto");
 	pa2m_afirmar(lista_elemento_en_posicion(li, 2) == &TERCERO, "El tercer elemento es correcto");
+	lista_destruir(li);
 	
 }
 
@@ -85,6 +86,8 @@ void prueba_quitar_uno(){
 	lista_insertar_en_posicion(li, &SEGUNDO, 1);
 	void *e = lista_quitar(li);	
 	pa2m_afirmar(e == &TERCERO,"Elemento quitado == TERCERO");
+	lista_destruir(li);
+
 }
 
 int main()
@@ -92,8 +95,8 @@ int main()
 	pa2m_nuevo_grupo(
 		"\n======================== LISTA ========================");
 	
-	// prueba_insertar_lista();
-	// prueba_insertar_entre();
-	prueba_quitar_uno();
+	prueba_insertar_lista();
+	prueba_insertar_entre();
+	// prueba_quitar_uno();
 	return pa2m_mostrar_reporte();
 }
