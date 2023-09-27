@@ -79,7 +79,7 @@ int main()
 	pa2m_nuevo_grupo(
 		"\n======================== LISTA ========================");
 	
-	// prueba_insertar_lista();
+	prueba_insertar_lista();
 	prueba_insertar_entre();
 	return pa2m_mostrar_reporte();
 }

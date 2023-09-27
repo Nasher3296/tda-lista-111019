@@ -37,7 +37,7 @@ lista_t *lista_crear()
 	return li;
 }
 
-nodo_t *nuevo_nodo_cargado(void *elemento){
+nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente){
 	if(!elemento)
 		return NULL;
 
@@ -47,6 +47,7 @@ nodo_t *nuevo_nodo_cargado(void *elemento){
 		return NULL;
 
 	nuevo_nodo->elemento = elemento;
+	nuevo_nodo->siguiente = siguiente;
 	return nuevo_nodo;
 }
 /**
@@ -59,7 +60,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	if(!lista || !elemento) 
 		return NULL;
 
-	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento);
+	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, NULL);
 
 	if(!nuevo_nodo)
 		return NULL;
@@ -81,12 +82,11 @@ lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
 	if(!li || !elemento)
 		return NULL;
 	
-	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento);
+	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, li->nodo_inicio);
 
 	if(!nuevo_nodo)
 		return NULL;
 
-	nuevo_nodo->siguiente = li->nodo_inicio;
 	li->nodo_inicio = nuevo_nodo;
 	li->tamanio++;
 	
@@ -94,15 +94,14 @@ lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
 }
 
 lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
-	if(!li || !elemento)
+	if(!li || !elemento || !nodo_anterior)
 		return NULL;
 	
-	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento);
+	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, nodo_anterior->siguiente);
 
 	if(!nuevo_nodo)
 		return NULL;
 
-	nuevo_nodo->siguiente = nodo_anterior->siguiente;
 	nodo_anterior->siguiente = nuevo_nodo;
 	li->tamanio++;
 
