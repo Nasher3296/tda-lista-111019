@@ -126,7 +126,7 @@ nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
 
 	nodo_t *nodo_anterior = li->nodo_inicio;
 	size_t i = 0;
-	while(i++ < posicion)
+	while(++i < posicion)
 		nodo_anterior = nodo_anterior->siguiente;
 	return nodo_anterior;
 	
