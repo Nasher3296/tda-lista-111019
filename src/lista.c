@@ -60,6 +60,9 @@ lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
 	if(!nuevo_nodo)
 		return NULL;
 
+	if(!li->nodo_final)
+		li->nodo_final = nuevo_nodo;
+
 	li->nodo_inicio = nuevo_nodo;
 	li->tamanio++;
 	
@@ -83,10 +86,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	if(!nuevo_nodo)
 		return NULL;
 
-
-	if(!lista->nodo_inicio) 
-		lista->nodo_inicio = nuevo_nodo;
-	else
+	if(lista->nodo_final)
 		lista->nodo_final->siguiente = nuevo_nodo;
 	
 
