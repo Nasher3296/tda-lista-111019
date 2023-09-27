@@ -50,16 +50,34 @@ nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente){
 	nuevo_nodo->siguiente = siguiente;
 	return nuevo_nodo;
 }
+
+lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
+	if(!li || !elemento)
+		return NULL;
+	
+	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, li->nodo_inicio);
+
+	if(!nuevo_nodo)
+		return NULL;
+
+	li->nodo_inicio = nuevo_nodo;
+	li->tamanio++;
+	
+	return li;
+}
 /**
  * Inserta un elemento al final de la lista.
  *
  * Devuelve NULL si no pudo insertar el elemento a causa de un error, o la lista en caso de exito.
  */
 lista_t *lista_insertar(lista_t *lista, void *elemento)
-{
+{	
 	if(!lista || !elemento) 
 		return NULL;
 
+	if(lista->tamanio == 0)
+		return insertar_primer_lugar(lista, elemento);
+	
 	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, NULL);
 
 	if(!nuevo_nodo)
@@ -78,20 +96,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	return lista;
 }
 
-lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
-	if(!li || !elemento)
-		return NULL;
-	
-	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, li->nodo_inicio);
 
-	if(!nuevo_nodo)
-		return NULL;
-
-	li->nodo_inicio = nuevo_nodo;
-	li->tamanio++;
-	
-	return li;
-}
 
 lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
 	if(!li || !elemento || !nodo_anterior)
@@ -130,9 +135,8 @@ nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 				    size_t posicion)
 {
-	if(!lista || !elemento) //Entiendo que posicion < 0 se considera como posicion que no existe y no como error
+	if(!lista || !elemento)
 		return NULL;
-
 	if(posicion > lista->tamanio)
 		return lista_insertar(lista, elemento);
 
