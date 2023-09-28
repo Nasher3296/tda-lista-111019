@@ -16,8 +16,9 @@ struct lista {
 };
 
 struct lista_iterador {
-	//y acá?
-	int sarasa;
+	lista_t *lista;
+	nodo_t *anterior;
+	void *el;
 };
 
 /**
@@ -33,7 +34,7 @@ lista_t *lista_crear()
 	
 	li->nodo_inicio = NULL;
 	li->nodo_final = NULL;
-
+	li->tamanio = 0; //El calloc ya hace esto
 	return li;
 }
 
@@ -194,6 +195,7 @@ void *lista_quitar(lista_t *lista)
 	return elemento;	
 }
 
+//Esto es para mis pruebas y no deberia estar en la entrega final. Si por alguna razon entregue esto boca no va a ganar la 7ma
 void interar_toda_la_lista(lista_t *li){
 	if(lista_vacia(li))
 		return;
@@ -350,19 +352,30 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 {
 	if(!lista)
 		return NULL;
+	
+	lista_iterador_t *iterador = malloc(sizeof(lista_iterador_t));
+	if(!iterador)
+		return NULL;
 
-	// lista_t li
+	iterador->lista = lista;
+	iterador->anterior = NULL;
+	
 
-	return NULL;
+	return iterador;
 }
+
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
+	// return iterador && iterador->nodo_actual && iterador->nodo_actual->siguiente;
 	return false;
 }
 
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
+	if(iterador)
+		// iterador->nodo_actual->
+		return false;
 	return false;
 }
 
@@ -373,6 +386,11 @@ void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
 
 void lista_iterador_destruir(lista_iterador_t *iterador)
 {
+	if(!iterador)
+		return;
+
+	lista_destruir_todo(iterador->lista, NULL);
+	free(iterador);
 }
 
 /**
