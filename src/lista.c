@@ -17,8 +17,7 @@ struct lista {
 
 struct lista_iterador {
 	lista_t *lista;
-	nodo_t *anterior;
-	void *el;
+	nodo_t *actual;
 };
 
 /**
@@ -358,38 +357,46 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 		return NULL;
 
 	iterador->lista = lista;
-	iterador->anterior = NULL;
-	
+	iterador->actual = NULL;
 
 	return iterador;
-}
+}	
+
 
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
-	// return iterador && iterador->nodo_actual && iterador->nodo_actual->siguiente;
-	return false;
+	return iterador && iterador->actual && iterador->actual->siguiente;
 }
 
+/**
+ * Avanza el iterador al siguiente elemento.
+ * Devuelve true si pudo avanzar el iterador o false en caso de
+ * que no queden elementos o en caso de error.
+ *
+ * Una vez llegado al último elemento, si se invoca a
+ * lista_iterador_elemento_actual, el resultado siempre será NULL.
+ */
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
-	if(iterador)
-		// iterador->nodo_actual->
+	if(!lista_iterador_tiene_siguiente(iterador))
 		return false;
-	return false;
+
+	iterador->actual = iterador->actual->siguiente;
+	return true;
 }
 
+/**
+ * Devuelve el elemento actual del iterador o NULL en caso de que no
+ * exista dicho elemento o en caso de error.
+ */
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
 {
-	return NULL;
+	return iterador && iterador->actual ? iterador->actual->elemento : NULL;
 }
 
 void lista_iterador_destruir(lista_iterador_t *iterador)
 {
-	if(!iterador)
-		return;
-
-	lista_destruir_todo(iterador->lista, NULL);
 	free(iterador);
 }
 
