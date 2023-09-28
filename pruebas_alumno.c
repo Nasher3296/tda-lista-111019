@@ -4,6 +4,35 @@
 #include "src/cola.h"
 #include "src/pila.h"
 
+void probar_en_lista_5(void *(*funcion)(void *, void *)){
+	char PRIMERO = 'A'; //0
+	char SEGUNDO = 'B';	//1
+	char TERCERO = 'C';	//2
+	char CUARTO = 'D';	//3
+	char QUINTO = 'E';	//4
+	lista_t *li = lista_crear();
+	
+	lista_insertar_en_posicion(li, &TERCERO, 10);
+	lista_insertar_en_posicion(li, &PRIMERO, 0);
+	lista_insertar_en_posicion(li, &SEGUNDO, 1);
+	lista_insertar_en_posicion(li, &CUARTO, 4);
+	lista_insertar_en_posicion(li, &QUINTO, 42);
+	void *a = lista_elemento_en_posicion(li, 0);
+	void *b = lista_elemento_en_posicion(li, 1);	
+	void *c = lista_elemento_en_posicion(li, 2);	
+	void *d = lista_elemento_en_posicion(li, 3);	
+	void *e = lista_elemento_en_posicion(li, 4);	
+
+	pa2m_afirmar(a == &PRIMERO,"Elemento en pos 0 == PRIMERO");
+	pa2m_afirmar(b == &SEGUNDO,"Elemento en pos 1 == SEGUNDO");
+	pa2m_afirmar(c == &TERCERO,"Elemento en pos 2 == TERCERO");
+	pa2m_afirmar(d == &CUARTO,"Elemento en pos 3 == CUARTO");
+	pa2m_afirmar(e == &QUINTO,"Elemento en pos 4 == QUINTO");
+	
+	funcion(a,(void *)&PRIMERO);
+
+	lista_destruir(li);
+}
 void prueba_insertar_lista(){
 	char PRIMERO = 'A';
 	char SEGUNDO = 'B';
@@ -90,13 +119,37 @@ void prueba_quitar_uno(){
 
 }
 
+void *prueba_quitar_en_fn(void *elemento, void *COSO){
+	pa2m_afirmar(elemento == COSO, "FUNCIONO XD");
+	
+
+	
+
+	// pa2m_nuevo_grupo(
+	// 	"\n===================== Quito de posicion desde ultimo =====================");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,4) == &QUINTO,"Quito QUINTO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,3) == &CUARTO,"Quito CUARTO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,2) == &TERCERO,"Quito TERCERO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,1) == &SEGUNDO,"Quito SEGUNDO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,0) == &PRIMERO,"Quito PRIMERO");
+	
+	// pa2m_afirmar(lista_vacia(li), "La lista esta vacia");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,0) == NULL,"No se puede quitar de lista vacia");
+	// // pa2m_afirmar(lista_quitar_de_posicion(li,32) == NULL,"No se puede quitar de lista vacia x2");
+	// pa2m_afirmar(lista_vacia(li), "La lista esta vacia");
+
+	// lista_destruir(li);
+	return NULL;
+}
+
 int main()
 {
 	pa2m_nuevo_grupo(
 		"\n======================== LISTA ========================");
 	
-	prueba_insertar_lista();
-	prueba_insertar_entre();
+	// prueba_insertar_lista();
+	// prueba_insertar_entre();
 	// prueba_quitar_uno();
+	probar_en_lista_5(prueba_quitar_en_fn);
 	return pa2m_mostrar_reporte();
 }

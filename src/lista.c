@@ -147,6 +147,43 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 	return insertar_entre(lista, nodo_anterior, elemento);
 }
 
+
+
+void *quitar_primero(lista_t *li){
+	if(!li || !li->nodo_inicio)
+		return NULL;
+	
+	nodo_t *nodo_eliminar = li->nodo_inicio;
+	void *elemento = nodo_eliminar->elemento;
+
+	if(li->nodo_inicio == li->nodo_final)
+		li->nodo_final = NULL;
+
+	li->nodo_inicio = nodo_eliminar->siguiente;
+	li->tamanio--;
+	free(nodo_eliminar);
+	return elemento;
+}
+
+void *quitar_ultimo(lista_t *li){
+	if(!li || !li->nodo_final)
+		return NULL;
+	
+	if(li->tamanio == 1)
+		return quitar_primero(li);
+
+	nodo_t *nodo_anterior = nodo_anterior_a_n(li, li->tamanio -1);
+	if(!nodo_anterior)
+		return NULL;
+		
+	nodo_t *nodo_eliminar = li->nodo_final;
+	void *elemento = nodo_eliminar->elemento;
+	li->nodo_final = nodo_anterior;
+	li->tamanio--;
+	free(nodo_eliminar);
+	return elemento;
+}
+
 /**
  * Quita de la lista el elemento que se encuentra en la ultima posición.
  *
@@ -156,7 +193,11 @@ void *lista_quitar(lista_t *lista)
 {
 	if(!lista || !lista->nodo_final)
 		return NULL;
-	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, lista->tamanio );
+
+	if(lista->tamanio == 1)
+		return quitar_primero(lista);
+
+	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, lista->tamanio);
 	if(!nodo_anterior)
 		return NULL;
 
@@ -167,10 +208,37 @@ void *lista_quitar(lista_t *lista)
 	free(lista->nodo_final);
 	return elemento;	
 }
-
+/**
+ * Quita de la lista el elemento que se encuentra en la posición
+ * indicada, donde 0 es el primer elemento de la lista.
+ *
+ * En caso de no existir esa posición se intentará borrar el último
+ * elemento.
+ *
+ * Devuelve el elemento removido de la lista o NULL en caso de error.
+ *
+ */
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
-	return NULL;
+	if(!lista)
+		return NULL;
+
+	if(posicion == 0)
+		return quitar_primero(lista);
+	
+	if(posicion >= lista->tamanio)
+		return quitar_ultimo(lista); 
+
+	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
+	if(!nodo_anterior)
+		return NULL;
+	
+	nodo_t *nodo_eliminar = nodo_anterior->siguiente;
+	nodo_anterior->siguiente = nodo_eliminar->siguiente;
+	void *elemento = nodo_eliminar->elemento; //Guardar memoria(?
+
+	free(nodo_eliminar);
+	return elemento;	
 }
 
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
@@ -187,10 +255,23 @@ void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 	return nodo_anterior->siguiente->elemento;
 }
 
+/**
+ * Devuelve el primer elemento de la lista que cumple la condición
+ * comparador(elemento, contexto) == 0.
+ *
+ * Si no existe el elemento devuelve NULL.
+ */
 void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
 			    void *contexto)
 {
-	return NULL;
+	if(!lista || !comparador || !contexto)
+		return NULL;
+	
+	nodo_t *nodo_actual = lista->nodo_inicio;
+	while(nodo_actual && comparador(nodo_actual->elemento, contexto) != 0)
+		nodo_actual = nodo_actual->siguiente;
+	
+	return nodo_actual->elemento;
 }
 
 /**
