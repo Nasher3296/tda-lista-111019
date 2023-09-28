@@ -120,18 +120,15 @@ void prueba_quitar_uno(){
 }
 
 void *prueba_quitar_en_fn(void *elemento, void *COSO){
-	pa2m_afirmar(elemento == COSO, "FUNCIONO XD");
+	pa2m_afirmar(elemento == COSO, "Funciona :0");
 	
-
-	
-
 	// pa2m_nuevo_grupo(
-	// 	"\n===================== Quito de posicion desde ultimo =====================");
-	// pa2m_afirmar(lista_quitar_de_posicion(li,4) == &QUINTO,"Quito QUINTO");
-	// pa2m_afirmar(lista_quitar_de_posicion(li,3) == &CUARTO,"Quito CUARTO");
-	// pa2m_afirmar(lista_quitar_de_posicion(li,2) == &TERCERO,"Quito TERCERO");
-	// pa2m_afirmar(lista_quitar_de_posicion(li,1) == &SEGUNDO,"Quito SEGUNDO");
-	// pa2m_afirmar(lista_quitar_de_posicion(li,0) == &PRIMERO,"Quito PRIMERO");
+	// 	"\n===================== Saco de posicion desde ultimo =====================");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,4) == &QUINTO,"Saco QUINTO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,3) == &CUARTO,"Saco CUARTO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,2) == &TERCERO,"Saco TERCERO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,1) == &SEGUNDO,"Saco SEGUNDO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,0) == &PRIMERO,"Saco PRIMERO");
 	
 	// pa2m_afirmar(lista_vacia(li), "La lista esta vacia");
 	// pa2m_afirmar(lista_quitar_de_posicion(li,0) == NULL,"No se puede quitar de lista vacia");
@@ -142,14 +139,106 @@ void *prueba_quitar_en_fn(void *elemento, void *COSO){
 	return NULL;
 }
 
+void *prueba_5_eliminar_ordenado(){
+	pa2m_nuevo_grupo(
+		"\n===================== Saco ordenado con posicion =====================");
+	char PRIMERO = 'A'; //0
+	char SEGUNDO = 'B';	//1
+	char TERCERO = 'C';	//2
+	char CUARTO = 'D';	//3
+	char QUINTO = 'E';	//4
+	lista_t *li = lista_crear();
+	
+	lista_insertar_en_posicion(li, &TERCERO, 10);
+	lista_insertar_en_posicion(li, &PRIMERO, 0);
+	lista_insertar_en_posicion(li, &SEGUNDO, 1);
+	lista_insertar_en_posicion(li, &CUARTO, 4);
+	lista_insertar_en_posicion(li, &QUINTO, 42);
+	void *a = lista_elemento_en_posicion(li, 0);
+	void *b = lista_elemento_en_posicion(li, 1);	
+	void *c = lista_elemento_en_posicion(li, 2);	
+	void *d = lista_elemento_en_posicion(li, 3);	
+	void *e = lista_elemento_en_posicion(li, 4);	
+
+
+	
+	pa2m_afirmar(lista_quitar_de_posicion(li,4) == e,"Saco QUINTO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,3) == d,"Saco CUARTO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,2) == c,"Saco TERCERO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,1) == b,"Saco SEGUNDO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,0) == a,"Saco PRIMERO");
+
+	pa2m_afirmar(e == &QUINTO,"e se conserva");
+	
+
+	pa2m_afirmar(lista_vacia(li), "La lista esta vacia");
+	pa2m_afirmar(lista_quitar_de_posicion(li,0) == NULL,"No se puede quitar de lista vacia");
+	pa2m_afirmar(lista_quitar_de_posicion(li,32) == NULL,"No se puede quitar de lista vacia x2");
+
+	lista_destruir(li);
+	return NULL;
+}
+
+void comprobar_tamanio(lista_t *li){
+	printf("\nLA LISTA ES DE TAMANIO %lu\n", lista_tamanio(li));
+}
+
+void *prueba_5_eliminar_desordenado(){
+	pa2m_nuevo_grupo(
+		"\n===================== Saco ordenado con posicion =====================");
+	char PRIMERO = 'A'; //0
+	char SEGUNDO = 'B';	//1
+	char TERCERO = 'C';	//2
+	char CUARTO = 'D';	//3
+	char QUINTO = 'E';	//4
+	lista_t *li = lista_crear();
+	
+	lista_insertar_en_posicion(li, &TERCERO, 10);
+	lista_insertar_en_posicion(li, &PRIMERO, 0);
+	lista_insertar_en_posicion(li, &SEGUNDO, 1);
+	lista_insertar_en_posicion(li, &CUARTO, 4);
+	lista_insertar_en_posicion(li, &QUINTO, 42);
+	void *a = lista_elemento_en_posicion(li, 0);
+	void *b = lista_elemento_en_posicion(li, 1);	
+	void *c = lista_elemento_en_posicion(li, 2);	
+	void *d = lista_elemento_en_posicion(li, 3);	
+	void *e = lista_elemento_en_posicion(li, 4);	
+
+
+	pa2m_afirmar(lista_primero(li) == a,"a es el primero");
+	
+	// pa2m_afirmar(lista_quitar_de_posicion(li,10) == e,"Saco QUINTO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,10) == d,"Saco CUARTO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,10) == c,"Saco TERCERO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,10) == b,"Saco SEGUNDO");
+	// pa2m_afirmar(lista_quitar_de_posicion(li,10) == a,"Saco PRIMERO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,10) == e,"Saco QUINTO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,1) == b,"Saco SEGUNDO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,0) == a,"Saco PRIMERO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,3) == d,"Saco CUARTO");
+	pa2m_afirmar(lista_quitar_de_posicion(li,1) == c,"Saco TERCERO");
+	comprobar_tamanio(li);
+	pa2m_afirmar(e == &QUINTO,"e se conserva");
+	
+
+	pa2m_afirmar(lista_vacia(li), "La lista esta vacia");
+	pa2m_afirmar(lista_quitar_de_posicion(li,0) == NULL,"No se puede quitar de lista vacia");
+	pa2m_afirmar(lista_quitar_de_posicion(li,32) == NULL,"No se puede quitar de lista vacia x2");
+
+	lista_destruir(li);
+	return NULL;
+}
+
 int main()
 {
 	pa2m_nuevo_grupo(
 		"\n======================== LISTA ========================");
 	
-	// prueba_insertar_lista();
-	// prueba_insertar_entre();
-	// prueba_quitar_uno();
+	prueba_insertar_lista();
+	prueba_insertar_entre();
+	prueba_quitar_uno();
 	probar_en_lista_5(prueba_quitar_en_fn);
+	prueba_5_eliminar_ordenado();
+	prueba_5_eliminar_desordenado();
 	return pa2m_mostrar_reporte();
 }

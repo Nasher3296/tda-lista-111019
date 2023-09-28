@@ -152,38 +152,22 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 void *quitar_primero(lista_t *li){
 	if(!li || !li->nodo_inicio)
 		return NULL;
-	
 	nodo_t *nodo_eliminar = li->nodo_inicio;
 	void *elemento = nodo_eliminar->elemento;
 
 	if(li->nodo_inicio == li->nodo_final)
 		li->nodo_final = NULL;
-
-	li->nodo_inicio = nodo_eliminar->siguiente;
-	li->tamanio--;
-	free(nodo_eliminar);
-	return elemento;
-}
-
-void *quitar_ultimo(lista_t *li){
-	if(!li || !li->nodo_final)
-		return NULL;
 	
-	if(li->tamanio == 1)
-		return quitar_primero(li);
 
-	nodo_t *nodo_anterior = nodo_anterior_a_n(li, li->tamanio -1);
-	if(!nodo_anterior)
-		return NULL;
-		
-	nodo_t *nodo_eliminar = li->nodo_final;
-	void *elemento = nodo_eliminar->elemento;
-	li->nodo_final = nodo_anterior;
+	li->nodo_inicio = li->nodo_inicio->siguiente;
 	li->tamanio--;
 	free(nodo_eliminar);
 	return elemento;
 }
 
+// void imprimir_direccion_nodo(void *txt, nodo_t *n){
+// 	printf("%s: %p\n",txt,(void *)n);
+// }
 /**
  * Quita de la lista el elemento que se encuentra en la ultima posición.
  *
@@ -197,16 +181,29 @@ void *lista_quitar(lista_t *lista)
 	if(lista->tamanio == 1)
 		return quitar_primero(lista);
 
-	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, lista->tamanio);
+	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, lista->tamanio - 1);
+
 	if(!nodo_anterior)
 		return NULL;
 
-	void *elemento = nodo_anterior->elemento;
+	void *elemento = nodo_anterior->siguiente->elemento;
 
 	lista->tamanio--;
-	lista->nodo_final = nodo_anterior; 
+	nodo_anterior->siguiente = NULL;
 	free(lista->nodo_final);
+	lista->nodo_final = nodo_anterior; 
 	return elemento;	
+}
+
+void interar_toda_la_lista(lista_t *li){
+	if(!li)
+		return;
+	nodo_t *nodo_actual = li->nodo_inicio;
+	int i = 0;
+	while(nodo_actual){
+		printf("NODO %d: %p\n",i++,(void *)nodo_actual);
+		nodo_actual = nodo_actual->siguiente;
+	}
 }
 /**
  * Quita de la lista el elemento que se encuentra en la posición
@@ -225,9 +222,9 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 
 	if(posicion == 0)
 		return quitar_primero(lista);
-	
+
 	if(posicion >= lista->tamanio)
-		return quitar_ultimo(lista); 
+		return lista_quitar(lista); 
 
 	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
 	if(!nodo_anterior)
@@ -236,8 +233,8 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 	nodo_t *nodo_eliminar = nodo_anterior->siguiente;
 	nodo_anterior->siguiente = nodo_eliminar->siguiente;
 	void *elemento = nodo_eliminar->elemento; //Guardar memoria(?
-
 	free(nodo_eliminar);
+	lista->tamanio--;
 	return elemento;	
 }
 
