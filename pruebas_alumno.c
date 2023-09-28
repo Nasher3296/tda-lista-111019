@@ -149,11 +149,11 @@ void *prueba_5_eliminar_ordenado(){
 	char QUINTO = 'E';	//4
 	lista_t *li = lista_crear();
 	
-	lista_insertar_en_posicion(li, &TERCERO, 10);
 	lista_insertar_en_posicion(li, &PRIMERO, 0);
 	lista_insertar_en_posicion(li, &SEGUNDO, 1);
-	lista_insertar_en_posicion(li, &CUARTO, 4);
-	lista_insertar_en_posicion(li, &QUINTO, 42);
+	lista_insertar_en_posicion(li, &TERCERO, 3);
+	lista_insertar_en_posicion(li, &CUARTO, 3);
+	lista_insertar_en_posicion(li, &QUINTO, 4);
 	void *a = lista_elemento_en_posicion(li, 0);
 	void *b = lista_elemento_en_posicion(li, 1);	
 	void *c = lista_elemento_en_posicion(li, 2);	

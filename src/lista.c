@@ -12,7 +12,7 @@ typedef struct nodo {
 struct lista {
 	nodo_t *nodo_inicio;
 	nodo_t *nodo_final;
-	size_t tamanio;
+	size_t tamanio; //Con esto reduzco el costo de lista_tamanio a O(1). 
 };
 
 struct lista_iterador {
@@ -88,7 +88,6 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 
 	if(lista->nodo_final)
 		lista->nodo_final->siguiente = nuevo_nodo;
-	
 
 	lista->nodo_final = nuevo_nodo;
 	lista->tamanio++;
@@ -121,7 +120,7 @@ lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
  */
 
 nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
-	if(!li || posicion > li->tamanio || posicion == 0) //No hay anterior al primero
+	if(!li || posicion >= li->tamanio || posicion == 0) //No hay anterior al primero
 		return NULL;
 
 	nodo_t *nodo_anterior = li->nodo_inicio;
@@ -136,7 +135,7 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 {
 	if(!lista || !elemento)
 		return NULL;
-	if(posicion > lista->tamanio)
+	if(posicion >= lista->tamanio)
 		return lista_insertar(lista, elemento);
 
 	if(posicion == 0)
