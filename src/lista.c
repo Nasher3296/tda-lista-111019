@@ -120,7 +120,7 @@ lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
  */
 
 nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
-	if(!li || posicion >= li->tamanio || posicion == 0) //No hay anterior al primero
+	if(lista_vacia(li) || posicion >= li->tamanio || posicion == 0) //No hay anterior al primero
 		return NULL;
 
 	nodo_t *nodo_anterior = li->nodo_inicio;
@@ -149,7 +149,7 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 
 
 void *quitar_primero(lista_t *li){
-	if(!li || !li->nodo_inicio)
+	if(lista_vacia(li))
 		return NULL;
 	nodo_t *nodo_eliminar = li->nodo_inicio;
 	void *elemento = nodo_eliminar->elemento;
@@ -174,7 +174,7 @@ void *quitar_primero(lista_t *li){
  */
 void *lista_quitar(lista_t *lista)
 {
-	if(!lista || !lista->nodo_final)
+	if(lista_vacia(lista))
 		return NULL;
 
 	if(lista->tamanio == 1)
@@ -195,7 +195,7 @@ void *lista_quitar(lista_t *lista)
 }
 
 void interar_toda_la_lista(lista_t *li){
-	if(!li)
+	if(lista_vacia(li))
 		return;
 	nodo_t *nodo_actual = li->nodo_inicio;
 	int i = 0;
@@ -216,7 +216,7 @@ void interar_toda_la_lista(lista_t *li){
  */
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
-	if(!lista)
+	if(lista_vacia(lista))
 		return NULL;
 
 	if(posicion == 0)
@@ -239,7 +239,7 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 {
-	if(!lista || posicion >= lista->tamanio)
+	if(lista_vacia(lista) || posicion >= lista->tamanio)
 		return NULL;
 	
 	if(posicion == 0)
@@ -260,7 +260,7 @@ void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
 			    void *contexto)
 {
-	if(!lista || !comparador || !contexto)
+	if(lista_vacia(lista) || !comparador || !contexto)
 		return NULL;
 	
 	nodo_t *nodo_actual = lista->nodo_inicio;
@@ -276,7 +276,7 @@ void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
  */
 void *lista_primero(lista_t *lista)
 {
-	return lista && lista->nodo_inicio ? lista->nodo_inicio->elemento : NULL;
+	return !(lista_vacia(lista)) ? lista->nodo_inicio->elemento : NULL;
 }
 
 /**
@@ -285,7 +285,7 @@ void *lista_primero(lista_t *lista)
  */
 void *lista_ultimo(lista_t *lista)
 {
-	return lista && lista->nodo_final ? lista->nodo_final->elemento : NULL;
+	return !(lista_vacia(lista)) ? lista->nodo_final->elemento : NULL;
 }
 
 /**
@@ -335,8 +335,24 @@ void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 	free(lista);
 }
 
+/**
+ * Crea un iterador para una lista. El iterador creado es válido desde
+ * el momento de su creación hasta que no haya mas elementos por
+ * recorrer o se modifique la lista iterada (agregando o quitando
+ * elementos de la lista). 
+ *
+ * Al momento de la creación, el iterador queda listo para devolver el
+ * primer elemento utilizando lista_iterador_elemento_actual.
+ *
+ * Devuelve el puntero al iterador creado o NULL en caso de error.
+ */
 lista_iterador_t *lista_iterador_crear(lista_t *lista)
 {
+	if(!lista)
+		return NULL;
+
+	// lista_t li
+
 	return NULL;
 }
 
@@ -359,8 +375,29 @@ void lista_iterador_destruir(lista_iterador_t *iterador)
 {
 }
 
+/**
+ * Iterador interno. Recorre la lista e invoca la funcion con cada elemento de
+ * la misma como primer parámetro. Dicha función puede devolver true si se deben
+ * seguir recorriendo elementos o false si se debe dejar de iterar elementos.
+ *
+ * El puntero contexto se pasa como segundo argumento a la función del usuario.
+ *
+ * La función devuelve la cantidad de elementos iterados o 0 en caso de error
+ * (errores de memoria, función o lista NULL, etc).
+ *
+ */
 size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *),
 			       void *contexto)
 {
-	return 0;
+	if(lista_vacia(lista) || !funcion)
+		return 0;
+		
+	size_t i = 0;
+	nodo_t *nodo_actual = lista->nodo_inicio;
+	while(nodo_actual && funcion(nodo_actual, contexto)){
+		nodo_actual = nodo_actual->siguiente;
+		i++;
+	}	
+
+	return i;
 }
