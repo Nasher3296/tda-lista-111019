@@ -38,8 +38,8 @@ lista_t *lista_crear()
 }
 
 nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente){
-	if(!elemento)
-		return NULL;
+	// if(!elemento)
+	// 	return NULL;
 
 	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
 
@@ -52,7 +52,7 @@ nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente){
 }
 
 lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
-	if(!li || !elemento)
+	if(!li)// || !elemento)
 		return NULL;
 	
 	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, li->nodo_inicio);
@@ -75,7 +75,7 @@ lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
  */
 lista_t *lista_insertar(lista_t *lista, void *elemento)
 {	
-	if(!lista || !elemento) 
+	if(!lista)// || !elemento) 
 		return NULL;
 
 	if(lista->tamanio == 0)
@@ -98,7 +98,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 
 
 lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
-	if(!li || !elemento || !nodo_anterior)
+	if(!li || !nodo_anterior)// || !elemento)
 		return NULL;
 	
 	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, nodo_anterior->siguiente);
@@ -133,7 +133,7 @@ nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 				    size_t posicion)
 {
-	if(!lista || !elemento)
+	if(!lista)// || !elemento)
 		return NULL;
 	if(posicion >= lista->tamanio)
 		return lista_insertar(lista, elemento);
@@ -199,9 +199,7 @@ void interar_toda_la_lista(lista_t *li){
 	if(lista_vacia(li))
 		return;
 	nodo_t *nodo_actual = li->nodo_inicio;
-	int i = 0;
 	while(nodo_actual){
-		printf("NODO %d: %p\n",i++,(void *)nodo_actual);
 		nodo_actual = nodo_actual->siguiente;
 	}
 }
@@ -325,6 +323,7 @@ void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 		return;
 	nodo_t *nodo_actual = lista->nodo_inicio;
 	nodo_t *nodo_pivote;
+	//lista_con_cada_elemento usar esto
 	while(nodo_actual){
 		if(funcion)
 			funcion(nodo_actual->elemento);
@@ -356,8 +355,10 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 	if(!iterador)
 		return NULL;
 
+	printf("\nCREACION DE ITERADOR:");
+	printf("\n\tTAMANIO: %lu",lista->tamanio);
 	iterador->lista = lista;
-	iterador->actual = NULL;
+	iterador->actual = lista->nodo_inicio;
 
 	return iterador;
 }	
@@ -366,7 +367,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
-	return iterador && iterador->actual && iterador->actual->siguiente;
+	return iterador && iterador->lista && iterador->actual;
 }
 
 /**
@@ -380,10 +381,10 @@ bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
 	if(!lista_iterador_tiene_siguiente(iterador))
-		return false;
-
+		return  false;
+		
 	iterador->actual = iterador->actual->siguiente;
-	return true;
+	return true;	
 }
 
 /**
