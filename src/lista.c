@@ -86,9 +86,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	if(!nuevo_nodo)
 		return NULL;
 
-	if(lista->nodo_final)
-		lista->nodo_final->siguiente = nuevo_nodo;
-
+	lista->nodo_final->siguiente = nuevo_nodo;
 	lista->nodo_final = nuevo_nodo;
 	lista->tamanio++;
 
@@ -355,8 +353,6 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 	if(!iterador)
 		return NULL;
 
-	printf("\nCREACION DE ITERADOR:");
-	printf("\n\tTAMANIO: %lu",lista->tamanio);
 	iterador->lista = lista;
 	iterador->actual = lista->nodo_inicio;
 
@@ -367,7 +363,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
-	return iterador && iterador->lista && iterador->actual && iterador->actual->siguiente;
+	return iterador && iterador->actual;
 }
 
 /**
@@ -384,7 +380,7 @@ bool lista_iterador_avanzar(lista_iterador_t *iterador)
 		return  false;
 		
 	iterador->actual = iterador->actual->siguiente;
-	return true;	
+	return iterador->actual;	
 }
 
 /**
@@ -393,9 +389,6 @@ bool lista_iterador_avanzar(lista_iterador_t *iterador)
  */
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
 {
-	printf("\n\tPRINCIPIO: %p",(void*)iterador->lista->nodo_inicio);
-	printf("\n\tFINAL ELEMENTO: %p",(void*)iterador->lista->nodo_final);
-	printf("\n\tITERADO EL ELEMENTO: %p----------------------------------------------\n",(void*)iterador->actual);
 	return iterador && iterador->actual ? iterador->actual->elemento : NULL;
 }
 
