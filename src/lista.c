@@ -367,7 +367,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
-	return iterador && iterador->lista && iterador->actual;
+	return iterador && iterador->lista && iterador->actual && iterador->actual->siguiente;
 }
 
 /**
@@ -393,6 +393,9 @@ bool lista_iterador_avanzar(lista_iterador_t *iterador)
  */
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
 {
+	printf("\n\tPRINCIPIO: %p",(void*)iterador->lista->nodo_inicio);
+	printf("\n\tFINAL ELEMENTO: %p",(void*)iterador->lista->nodo_final);
+	printf("\n\tITERADO EL ELEMENTO: %p----------------------------------------------\n",(void*)iterador->actual);
 	return iterador && iterador->actual ? iterador->actual->elemento : NULL;
 }
 
