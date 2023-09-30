@@ -23,16 +23,15 @@ struct lista_iterador {
  * Crea la lista reservando la memoria necesaria.
  * Devuelve un puntero a la lista creada o NULL en caso de error.
  */
+//Costo: O(1)
 lista_t *lista_crear()
 {
 	return calloc(1, sizeof(lista_t));
 }
 
+//Costo: O(1)
 nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente)
 {
-	// if(!elemento)
-	// 	return NULL;
-
 	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
 
 	if (!nuevo_nodo)
@@ -43,6 +42,7 @@ nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente)
 	return nuevo_nodo;
 }
 
+//Costo: O(1)
 lista_t *insertar_primer_lugar(lista_t *li, void *elemento)
 {
 	if (!li)
@@ -61,18 +61,21 @@ lista_t *insertar_primer_lugar(lista_t *li, void *elemento)
 
 	return li;
 }
+
 /**
  * Inserta un elemento al final de la lista.
  *
  * Devuelve NULL si no pudo insertar el elemento a causa de un error, o la lista en caso de exito.
  */
+
+//Costo: O(1)
 lista_t *lista_insertar(lista_t *lista, void *elemento)
 {
 	if (!lista)
 		return NULL;
 
 	if (!lista->nodo_inicio)
-		return insertar_primer_lugar(lista, elemento);
+		return insertar_primer_lugar(lista, elemento); //Costo: O(1)
 
 	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, NULL);
 
@@ -86,6 +89,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	return lista;
 }
 
+//Costo: O(1)
 lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento)
 {
 	if (!li || !nodo_anterior)
@@ -103,6 +107,7 @@ lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento)
 	return li;
 }
 
+//Costo: O(n)
 nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion)
 {
 	if (lista_vacia(li) || posicion >= li->tamanio || !posicion)
@@ -122,22 +127,26 @@ nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion)
  *
  * Devuelve NULL si no pudo insertar el elemento a causa de un error, o la lista en caso de exito.
  */
+
+//Costo: O(n)
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 				    size_t posicion)
 {
 	if (!lista)
 		return NULL;
 	if (posicion >= lista->tamanio)
-		return lista_insertar(lista, elemento);
+		return lista_insertar(lista, elemento); //Costo: O(1)
 
 	if (!posicion)
-		return insertar_primer_lugar(lista, elemento);
+		return insertar_primer_lugar(lista, elemento); //Costo: O(1)
 
-	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
+	nodo_t *nodo_anterior =
+		nodo_anterior_a_n(lista, posicion); //Costo: O(n)
 
-	return insertar_entre(lista, nodo_anterior, elemento);
+	return insertar_entre(lista, nodo_anterior, elemento); //Costo: O(1)
 }
 
+//Costo: O(1)
 void *quitar_primero(lista_t *li)
 {
 	if (lista_vacia(li))
@@ -160,15 +169,17 @@ void *quitar_primero(lista_t *li)
  *
  * Devuelve el elemento removido de la lista o NULL en caso de error.
  */
+//Costo: O(n)
 void *lista_quitar(lista_t *lista)
 {
 	if (lista_vacia(lista))
 		return NULL;
 
 	if (lista->nodo_inicio == lista->nodo_final)
-		return quitar_primero(lista);
+		return quitar_primero(lista); //Costo: O(1)
 
-	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, lista->tamanio - 1);
+	nodo_t *nodo_anterior =
+		nodo_anterior_a_n(lista, lista->tamanio - 1); //Costo: O(n)
 
 	if (!nodo_anterior)
 		return NULL;
@@ -182,16 +193,6 @@ void *lista_quitar(lista_t *lista)
 	return elemento;
 }
 
-//Esto es para mis pruebas y no deberia estar en la entrega final. Si por alguna razon entregue esto boca no va a ganar la 7ma
-void interar_toda_la_lista(lista_t *li)
-{
-	if (lista_vacia(li))
-		return;
-	nodo_t *nodo_actual = li->nodo_inicio;
-	while (nodo_actual) {
-		nodo_actual = nodo_actual->siguiente;
-	}
-}
 /**
  * Quita de la lista el elemento que se encuentra en la posición
  * indicada, donde 0 es el primer elemento de la lista.
@@ -202,18 +203,20 @@ void interar_toda_la_lista(lista_t *li)
  * Devuelve el elemento removido de la lista o NULL en caso de error.
  *
  */
+//Costo: O(n)
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
 	if (lista_vacia(lista))
 		return NULL;
 
 	if (!posicion)
-		return quitar_primero(lista);
+		return quitar_primero(lista); //Costo: O(1)
 
 	if (posicion >= lista->tamanio)
-		return lista_quitar(lista);
+		return lista_quitar(lista); //Costo: O(n)
 
-	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
+	nodo_t *nodo_anterior =
+		nodo_anterior_a_n(lista, posicion); //Costo: O(n)
 	if (!nodo_anterior)
 		return NULL;
 
@@ -225,15 +228,17 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 	return elemento;
 }
 
+//Costo: O(n)
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 {
 	if (lista_vacia(lista) || posicion >= lista->tamanio)
 		return NULL;
 
 	if (!posicion)
-		return lista->nodo_inicio->elemento;
+		return lista->nodo_inicio->elemento; //Costo: O(1)
 
-	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
+	nodo_t *nodo_anterior =
+		nodo_anterior_a_n(lista, posicion); //Costo: O(n)
 
 	return nodo_anterior->siguiente->elemento;
 }
@@ -244,13 +249,15 @@ void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
  *
  * Si no existe el elemento devuelve NULL.
  */
+//Costo: O(n)
 void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
 			    void *contexto)
 {
 	if (lista_vacia(lista) || !comparador)
 		return NULL;
 	nodo_t *nodo_actual = lista->nodo_inicio;
-	while (nodo_actual && comparador(nodo_actual->elemento, contexto))
+	while (nodo_actual &&
+	       comparador(nodo_actual->elemento, contexto)) //Costo: O(n)
 		nodo_actual = nodo_actual->siguiente;
 
 	return nodo_actual ? nodo_actual->elemento : NULL;
@@ -260,6 +267,7 @@ void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
  * Devuelve el primer elemento de la lista o NULL si la lista se
  * encuentra vacía o no existe.
  */
+//Costo: O(1)
 void *lista_primero(lista_t *lista)
 {
 	return !(lista_vacia(lista)) ? lista->nodo_inicio->elemento : NULL;
@@ -269,6 +277,7 @@ void *lista_primero(lista_t *lista)
  * Devuelve el último elemento de la lista o NULL si la lista se
  * encuentra vacía o no existe.
  */
+//Costo: O(1)
 void *lista_ultimo(lista_t *lista)
 {
 	return !(lista_vacia(lista)) ? lista->nodo_final->elemento : NULL;
@@ -277,6 +286,7 @@ void *lista_ultimo(lista_t *lista)
 /**
  * Devuelve true si la lista está vacía (o no existe) o false en caso contrario.
  */
+//Costo: O(1)
 bool lista_vacia(lista_t *lista)
 {
 	return !(lista && lista->nodo_inicio);
@@ -286,6 +296,7 @@ bool lista_vacia(lista_t *lista)
  * Devuelve la cantidad de elementos almacenados en la lista.
  * Una lista que no existe no puede tener elementos.
  */
+//Costo: O(1)
 size_t lista_tamanio(lista_t *lista)
 {
 	return lista ? lista->tamanio : 0;
@@ -294,6 +305,7 @@ size_t lista_tamanio(lista_t *lista)
 /**
  * Libera la memoria reservada por la lista.
  */
+//Costo: O(n)
 void lista_destruir(lista_t *lista)
 {
 	lista_destruir_todo(lista, NULL);
@@ -304,6 +316,7 @@ void lista_destruir(lista_t *lista)
  * destructora dada (si no es NULL) a cada uno de los elementos presentes en la
  * lista.
  */
+//Costo: O(n)
 void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 {
 	if (!lista)
@@ -334,6 +347,7 @@ void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
  *
  * Devuelve el puntero al iterador creado o NULL en caso de error.
  */
+//Costo: O(1)
 lista_iterador_t *lista_iterador_crear(lista_t *lista)
 {
 	if (!lista)
@@ -353,6 +367,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
  * Devuelve true si hay mas elementos sobre los cuales iterar o false
  * si no hay mas.
  */
+//Costo: O(1)
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
 	return iterador && iterador->actual;
@@ -366,6 +381,7 @@ bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
  * Una vez llegado al último elemento, si se invoca a
  * lista_iterador_elemento_actual, el resultado siempre será NULL.
  */
+//Costo: O(1)
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
 	if (!lista_iterador_tiene_siguiente(iterador))
@@ -379,11 +395,13 @@ bool lista_iterador_avanzar(lista_iterador_t *iterador)
  * Devuelve el elemento actual del iterador o NULL en caso de que no
  * exista dicho elemento o en caso de error.
  */
+//Costo: O(1)
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
 {
 	return iterador && iterador->actual ? iterador->actual->elemento : NULL;
 }
 
+//Costo: O(1)
 void lista_iterador_destruir(lista_iterador_t *iterador)
 {
 	free(iterador);
@@ -400,6 +418,7 @@ void lista_iterador_destruir(lista_iterador_t *iterador)
  * (errores de memoria, función o lista NULL, etc).
  *
  */
+//Costo: O(n)
 size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *),
 			       void *contexto)
 {
