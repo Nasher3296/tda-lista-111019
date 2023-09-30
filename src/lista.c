@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 typedef struct nodo {
 	void *elemento;
 	struct nodo *siguiente;
@@ -12,7 +11,7 @@ typedef struct nodo {
 struct lista {
 	nodo_t *nodo_inicio;
 	nodo_t *nodo_final;
-	size_t tamanio; //Con esto reduzco el costo de lista_tamanio a O(1). 
+	size_t tamanio; //Con esto reduzco el costo de lista_tamanio a O(1).
 };
 
 struct lista_iterador {
@@ -26,24 +25,17 @@ struct lista_iterador {
  */
 lista_t *lista_crear()
 {
-	lista_t *li = calloc(1, sizeof(lista_t));
-
-	if(!li)
-		return NULL;
-	
-	li->nodo_inicio = NULL;
-	li->nodo_final = NULL;
-	li->tamanio = 0; //El calloc ya hace esto
-	return li;
+	return calloc(1, sizeof(lista_t));
 }
 
-nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente){
+nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente)
+{
 	// if(!elemento)
 	// 	return NULL;
 
 	nodo_t *nuevo_nodo = calloc(1, sizeof(nodo_t));
 
-	if(!nuevo_nodo)
+	if (!nuevo_nodo)
 		return NULL;
 
 	nuevo_nodo->elemento = elemento;
@@ -51,21 +43,22 @@ nodo_t *nuevo_nodo_cargado(void *elemento, nodo_t *siguiente){
 	return nuevo_nodo;
 }
 
-lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
-	if(!li)// || !elemento)
+lista_t *insertar_primer_lugar(lista_t *li, void *elemento)
+{
+	if (!li)
 		return NULL;
-	
+
 	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, li->nodo_inicio);
 
-	if(!nuevo_nodo)
+	if (!nuevo_nodo)
 		return NULL;
 
-	if(!li->nodo_final)
+	if (!li->nodo_final)
 		li->nodo_final = nuevo_nodo;
 
 	li->nodo_inicio = nuevo_nodo;
 	li->tamanio++;
-	
+
 	return li;
 }
 /**
@@ -74,16 +67,16 @@ lista_t *insertar_primer_lugar(lista_t *li, void *elemento){
  * Devuelve NULL si no pudo insertar el elemento a causa de un error, o la lista en caso de exito.
  */
 lista_t *lista_insertar(lista_t *lista, void *elemento)
-{	
-	if(!lista)// || !elemento) 
+{
+	if (!lista)
 		return NULL;
 
-	if(lista->tamanio == 0)
+	if (!lista->nodo_inicio)
 		return insertar_primer_lugar(lista, elemento);
-	
+
 	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, NULL);
 
-	if(!nuevo_nodo)
+	if (!nuevo_nodo)
 		return NULL;
 
 	lista->nodo_final->siguiente = nuevo_nodo;
@@ -93,22 +86,35 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 	return lista;
 }
 
-
-
-lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
-	if(!li || !nodo_anterior)// || !elemento)
+lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento)
+{
+	if (!li || !nodo_anterior)
 		return NULL;
-	
-	nodo_t *nuevo_nodo = nuevo_nodo_cargado(elemento, nodo_anterior->siguiente);
 
-	if(!nuevo_nodo)
+	nodo_t *nuevo_nodo =
+		nuevo_nodo_cargado(elemento, nodo_anterior->siguiente);
+
+	if (!nuevo_nodo)
 		return NULL;
 
 	nodo_anterior->siguiente = nuevo_nodo;
 	li->tamanio++;
 
-	return li;	
+	return li;
 }
+
+nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion)
+{
+	if (lista_vacia(li) || posicion >= li->tamanio || !posicion)
+		return NULL;
+
+	nodo_t *nodo_anterior = li->nodo_inicio;
+	size_t i = 0;
+	while (++i < posicion)
+		nodo_anterior = nodo_anterior->siguiente;
+	return nodo_anterior;
+}
+
 /**
  * Inserta un elemento en la posicion indicada, donde 0 es insertar
  * como primer elemento y 1 es insertar luego del primer elemento.  
@@ -116,55 +122,39 @@ lista_t *insertar_entre(lista_t *li, nodo_t *nodo_anterior, void *elemento){
  *
  * Devuelve NULL si no pudo insertar el elemento a causa de un error, o la lista en caso de exito.
  */
-
-nodo_t *nodo_anterior_a_n(lista_t *li, size_t posicion){
-	if(lista_vacia(li) || posicion >= li->tamanio || posicion == 0) //No hay anterior al primero
-		return NULL;
-
-	nodo_t *nodo_anterior = li->nodo_inicio;
-	size_t i = 0;
-	while(++i < posicion)
-		nodo_anterior = nodo_anterior->siguiente;
-	return nodo_anterior;
-}
-
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento,
 				    size_t posicion)
 {
-	if(!lista)// || !elemento)
+	if (!lista)
 		return NULL;
-	if(posicion >= lista->tamanio)
+	if (posicion >= lista->tamanio)
 		return lista_insertar(lista, elemento);
 
-	if(posicion == 0)
-		return insertar_primer_lugar(lista,elemento);
+	if (!posicion)
+		return insertar_primer_lugar(lista, elemento);
 
 	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
-	
+
 	return insertar_entre(lista, nodo_anterior, elemento);
 }
 
-
-
-void *quitar_primero(lista_t *li){
-	if(lista_vacia(li))
+void *quitar_primero(lista_t *li)
+{
+	if (lista_vacia(li))
 		return NULL;
+
 	nodo_t *nodo_eliminar = li->nodo_inicio;
 	void *elemento = nodo_eliminar->elemento;
 
-	if(li->nodo_inicio == li->nodo_final)
+	if (li->nodo_inicio == li->nodo_final)
 		li->nodo_final = NULL;
-	
 
-	li->nodo_inicio = li->nodo_inicio->siguiente;
+	li->nodo_inicio = nodo_eliminar->siguiente;
 	li->tamanio--;
 	free(nodo_eliminar);
 	return elemento;
 }
 
-// void imprimir_direccion_nodo(void *txt, nodo_t *n){
-// 	printf("%s: %p\n",txt,(void *)n);
-// }
 /**
  * Quita de la lista el elemento que se encuentra en la ultima posición.
  *
@@ -172,15 +162,15 @@ void *quitar_primero(lista_t *li){
  */
 void *lista_quitar(lista_t *lista)
 {
-	if(lista_vacia(lista))
+	if (lista_vacia(lista))
 		return NULL;
 
-	if(lista->tamanio == 1)
+	if (lista->nodo_inicio == lista->nodo_final)
 		return quitar_primero(lista);
 
 	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, lista->tamanio - 1);
 
-	if(!nodo_anterior)
+	if (!nodo_anterior)
 		return NULL;
 
 	void *elemento = nodo_anterior->siguiente->elemento;
@@ -188,16 +178,17 @@ void *lista_quitar(lista_t *lista)
 	lista->tamanio--;
 	nodo_anterior->siguiente = NULL;
 	free(lista->nodo_final);
-	lista->nodo_final = nodo_anterior; 
-	return elemento;	
+	lista->nodo_final = nodo_anterior;
+	return elemento;
 }
 
 //Esto es para mis pruebas y no deberia estar en la entrega final. Si por alguna razon entregue esto boca no va a ganar la 7ma
-void interar_toda_la_lista(lista_t *li){
-	if(lista_vacia(li))
+void interar_toda_la_lista(lista_t *li)
+{
+	if (lista_vacia(li))
 		return;
 	nodo_t *nodo_actual = li->nodo_inicio;
-	while(nodo_actual){
+	while (nodo_actual) {
 		nodo_actual = nodo_actual->siguiente;
 	}
 }
@@ -213,37 +204,36 @@ void interar_toda_la_lista(lista_t *li){
  */
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
-	if(lista_vacia(lista))
+	if (lista_vacia(lista))
 		return NULL;
 
-	if(posicion == 0)
+	if (!posicion)
 		return quitar_primero(lista);
 
-	if(posicion >= lista->tamanio)
-		return lista_quitar(lista); 
+	if (posicion >= lista->tamanio)
+		return lista_quitar(lista);
 
 	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
-	if(!nodo_anterior)
+	if (!nodo_anterior)
 		return NULL;
-	
+
 	nodo_t *nodo_eliminar = nodo_anterior->siguiente;
 	nodo_anterior->siguiente = nodo_eliminar->siguiente;
-	void *elemento = nodo_eliminar->elemento; //Guardar memoria(?
+	void *elemento = nodo_eliminar->elemento;
 	free(nodo_eliminar);
 	lista->tamanio--;
-	return elemento;	
+	return elemento;
 }
 
 void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 {
-	if(lista_vacia(lista) || posicion >= lista->tamanio)
+	if (lista_vacia(lista) || posicion >= lista->tamanio)
 		return NULL;
-	
-	if(posicion == 0)
+
+	if (!posicion)
 		return lista->nodo_inicio->elemento;
 
 	nodo_t *nodo_anterior = nodo_anterior_a_n(lista, posicion);
-	
 
 	return nodo_anterior->siguiente->elemento;
 }
@@ -257,14 +247,13 @@ void *lista_elemento_en_posicion(lista_t *lista, size_t posicion)
 void *lista_buscar_elemento(lista_t *lista, int (*comparador)(void *, void *),
 			    void *contexto)
 {
-	if(lista_vacia(lista) || !comparador || !contexto)
+	if (lista_vacia(lista) || !comparador)
 		return NULL;
-	
 	nodo_t *nodo_actual = lista->nodo_inicio;
-	while(nodo_actual && comparador(nodo_actual->elemento, contexto) != 0)
+	while (nodo_actual && comparador(nodo_actual->elemento, contexto))
 		nodo_actual = nodo_actual->siguiente;
-	
-	return nodo_actual->elemento;
+
+	return nodo_actual ? nodo_actual->elemento : NULL;
 }
 
 /**
@@ -290,7 +279,7 @@ void *lista_ultimo(lista_t *lista)
  */
 bool lista_vacia(lista_t *lista)
 {
-	return !(lista && lista ->nodo_inicio);
+	return !(lista && lista->nodo_inicio);
 }
 
 /**
@@ -317,15 +306,16 @@ void lista_destruir(lista_t *lista)
  */
 void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 {
-	if(!lista)
+	if (!lista)
 		return;
+
 	nodo_t *nodo_actual = lista->nodo_inicio;
 	nodo_t *nodo_pivote;
-	//lista_con_cada_elemento usar esto
-	while(nodo_actual){
-		if(funcion)
+
+	while (nodo_actual) {
+		if (funcion)
 			funcion(nodo_actual->elemento);
-		
+
 		nodo_pivote = nodo_actual;
 		nodo_actual = nodo_actual->siguiente;
 		free(nodo_pivote);
@@ -346,21 +336,23 @@ void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
  */
 lista_iterador_t *lista_iterador_crear(lista_t *lista)
 {
-	if(!lista)
+	if (!lista)
 		return NULL;
-	
+
 	lista_iterador_t *iterador = malloc(sizeof(lista_iterador_t));
-	if(!iterador)
+	if (!iterador)
 		return NULL;
 
 	iterador->lista = lista;
 	iterador->actual = lista->nodo_inicio;
 
 	return iterador;
-}	
+}
 
-
-
+/**
+ * Devuelve true si hay mas elementos sobre los cuales iterar o false
+ * si no hay mas.
+ */
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
 	return iterador && iterador->actual;
@@ -376,11 +368,11 @@ bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
  */
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
-	if(!lista_iterador_tiene_siguiente(iterador))
-		return  false;
-		
+	if (!lista_iterador_tiene_siguiente(iterador))
+		return false;
+
 	iterador->actual = iterador->actual->siguiente;
-	return iterador->actual;	
+	return iterador->actual;
 }
 
 /**
@@ -411,15 +403,14 @@ void lista_iterador_destruir(lista_iterador_t *iterador)
 size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *),
 			       void *contexto)
 {
-	if(lista_vacia(lista) || !funcion)
+	if (lista_vacia(lista) || !funcion)
 		return 0;
-		
+
 	size_t i = 0;
 	nodo_t *nodo_actual = lista->nodo_inicio;
-	while(nodo_actual && funcion(nodo_actual->elemento, contexto)){
+
+	while (nodo_actual && ++i && funcion(nodo_actual->elemento, contexto))
 		nodo_actual = nodo_actual->siguiente;
-		i++;
-	}	
 
 	return i;
 }

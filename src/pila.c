@@ -7,7 +7,7 @@
  */
 pila_t *pila_crear()
 {
-	return (pila_t*)(lista_crear());
+	return (pila_t *)(lista_crear());
 }
 
 /**
@@ -17,7 +17,7 @@ pila_t *pila_crear()
  */
 pila_t *pila_apilar(pila_t *pila, void *elemento)
 {
-	return (pila_t*)lista_insertar((lista_t*)pila, elemento);
+	return (pila_t *)lista_insertar((lista_t *)pila, elemento);
 }
 /**
  * Desapila un elemento de la pila y lo devuelve.
@@ -26,27 +26,27 @@ pila_t *pila_apilar(pila_t *pila, void *elemento)
  */
 void *pila_desapilar(pila_t *pila)
 {
-	return lista_quitar((lista_t*)pila);
+	return lista_quitar((lista_t *)pila);
 }
 /**
  * Devuelve el elemento en el tope de la pila o NULL en caso de que no exista.
  */
 void *pila_tope(pila_t *pila)
 {
-	return lista_ultimo((lista_t*)pila);
+	return lista_ultimo((lista_t *)pila);
 }
 
 size_t pila_tamanio(pila_t *pila)
 {
-	return lista_tamanio((lista_t*)pila);
+	return lista_tamanio((lista_t *)pila);
 }
 
 bool pila_vacia(pila_t *pila)
 {
-	return lista_vacia((lista_t*)pila);
+	return lista_vacia((lista_t *)pila);
 }
 
 void pila_destruir(pila_t *pila)
 {
-	lista_destruir((lista_t*)pila);
+	lista_destruir((lista_t *)pila);
 }
