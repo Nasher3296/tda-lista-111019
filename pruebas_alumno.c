@@ -6,6 +6,8 @@
 
 int main()
 {
-	printf("Hello world");
-	return 0;
+	pa2m_nuevo_grupo(
+		"\n======================== LISTA ========================");
+
+	return pa2m_mostrar_reporte();
 }
