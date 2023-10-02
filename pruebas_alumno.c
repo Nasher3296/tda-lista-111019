@@ -4,7 +4,6 @@
 #include "src/cola.h"
 #include "src/pila.h"
 
-
 void li_insertar()
 {
 	pa2m_nuevo_grupo(
@@ -74,7 +73,6 @@ void li_insertar()
 		     "El llamado TERCERO ahora esta en la 4ta pos");
 	lista_destruir(li);
 }
-
 
 void li_insertar_entre()
 {
@@ -216,14 +214,23 @@ void li_buscar_elemento_y_demas()
 	lista_insertar_en_posicion(li, &CUARTO, 3);
 	lista_insertar_en_posicion(li, &QUINTO, 4);
 
-	pa2m_afirmar(lista_elemento_en_posicion(li,0) == &PRIMERO, "Se busca el primer elemento");
-	pa2m_afirmar(lista_buscar_elemento(li, li_comparador,lista_elemento_en_posicion(li,0)) == &PRIMERO, "Se busca el primer elemento");
-	pa2m_afirmar(lista_buscar_elemento(li, li_comparador,lista_elemento_en_posicion(li,1)) == &SEGUNDO, "Se busca el segundo elemento");
+	pa2m_afirmar(lista_elemento_en_posicion(li, 0) == &PRIMERO,
+		     "Se busca el primer elemento");
+	pa2m_afirmar(lista_buscar_elemento(li, li_comparador,
+					   lista_elemento_en_posicion(li, 0)) ==
+			     &PRIMERO,
+		     "Se busca el primer elemento");
+	pa2m_afirmar(lista_buscar_elemento(li, li_comparador,
+					   lista_elemento_en_posicion(li, 1)) ==
+			     &SEGUNDO,
+		     "Se busca el segundo elemento");
 
-	pa2m_afirmar(lista_primero(li) == &PRIMERO, "Devuelve el primer elemento");
-	pa2m_afirmar(lista_ultimo(li) == &QUINTO, "Devuelve el ultimo elemento");
+	pa2m_afirmar(lista_primero(li) == &PRIMERO,
+		     "Devuelve el primer elemento");
+	pa2m_afirmar(lista_ultimo(li) == &QUINTO,
+		     "Devuelve el ultimo elemento");
 
-	lista_destruir_todo(li,NULL);
+	lista_destruir_todo(li, NULL);
 }
 
 void li_iterador_externo()
@@ -234,9 +241,9 @@ void li_iterador_externo()
 	char SEGUNDO = 'B';
 	char TERCERO = 'C';
 
-	
-	pa2m_afirmar(lista_iterador_crear(NULL) == NULL, "No creo iterador sin lista");
-	
+	pa2m_afirmar(lista_iterador_crear(NULL) == NULL,
+		     "No creo iterador sin lista");
+
 	lista_t *li = lista_crear();
 
 	lista_iterador_t *it = lista_iterador_crear(li);
@@ -246,29 +253,29 @@ void li_iterador_externo()
 
 	lista_iterador_destruir(it);
 
-
 	lista_insertar_en_posicion(li, &PRIMERO, 0);
 	lista_insertar_en_posicion(li, &SEGUNDO, 1);
 	lista_insertar_en_posicion(li, &TERCERO, 10);
 
 	it = lista_iterador_crear(li);
-	
+
 	pa2m_afirmar(lista_iterador_tiene_siguiente(it), "Tiene siguiente");
 	pa2m_afirmar(lista_iterador_avanzar(it), "Avanza");
-	pa2m_afirmar(lista_iterador_elemento_actual(it) == &SEGUNDO, "Muestra el elemento actual correcto");
+	pa2m_afirmar(lista_iterador_elemento_actual(it) == &SEGUNDO,
+		     "Muestra el elemento actual correcto");
 	pa2m_afirmar(lista_iterador_tiene_siguiente(it), "Tiene siguiente");
 	pa2m_afirmar(lista_iterador_avanzar(it), "Avanza");
 	pa2m_afirmar(lista_iterador_tiene_siguiente(it), "Tiene siguiente");
 	pa2m_afirmar(!lista_iterador_avanzar(it), "No avanza");
 	pa2m_afirmar(!lista_iterador_tiene_siguiente(it), "No tiene siguiente");
-	
+
 	lista_destruir(li);
 	lista_iterador_destruir(it);
 }
 
-bool li_iterador_interno_funcion_return(void *e, void* r)
+bool li_iterador_interno_funcion_return(void *e, void *r)
 {
-	return r ;
+	return r;
 }
 
 void li_iterador_interno()
@@ -279,7 +286,6 @@ void li_iterador_interno()
 	char SEGUNDO = 'B';
 	char TERCERO = 'C';
 
-	
 	lista_t *li = lista_crear();
 
 	lista_insertar_en_posicion(li, &PRIMERO, 0);
@@ -288,25 +294,29 @@ void li_iterador_interno()
 
 	int tr = 1;
 
-	pa2m_afirmar(!lista_con_cada_elemento(li,NULL,NULL), "El iterador interno no itera ninguno si no hay funcion");
-	pa2m_afirmar(lista_con_cada_elemento(li,li_iterador_interno_funcion_return,NULL) == 1, "El iterador interno itera hasta el primero");
-	pa2m_afirmar(lista_con_cada_elemento(li,li_iterador_interno_funcion_return,&tr) == 3, "El iterador interno itera hasta el ultimo");
-	
+	pa2m_afirmar(!lista_con_cada_elemento(li, NULL, NULL),
+		     "El iterador interno no itera ninguno si no hay funcion");
+	pa2m_afirmar(lista_con_cada_elemento(
+			     li, li_iterador_interno_funcion_return, NULL) == 1,
+		     "El iterador interno itera hasta el primero");
+	pa2m_afirmar(lista_con_cada_elemento(
+			     li, li_iterador_interno_funcion_return, &tr) == 3,
+		     "El iterador interno itera hasta el ultimo");
+
 	lista_destruir(li);
 }
 
 void funciones_lista()
 {
-	// li_insertar();
-	// li_insertar();
-	// li_insertar_entre();
-	// li_quitar_uno();
-	// li_quitar_en_fn();
-	// li_eliminar_desordenado();
-	// li_buscar_elemento_y_demas();
-	// li_iterador_externo();
-	// li_iterador_interno();
-
+	li_insertar();
+	li_insertar();
+	li_insertar_entre();
+	li_quitar_uno();
+	li_quitar_en_fn();
+	li_eliminar_desordenado();
+	li_buscar_elemento_y_demas();
+	li_iterador_externo();
+	li_iterador_interno();
 }
 void funciones_pila()
 {
@@ -315,13 +325,14 @@ void funciones_pila()
 	char TERCERO = 'C';
 	pila_t *pi = pila_crear();
 	pa2m_afirmar(pi != NULL, "Se creo la pila");
-	pa2m_afirmar(!pila_desapilar(pi), "No se puede desapilar una lista vacia");
-	pa2m_afirmar(pila_tope(pi)==NULL, "Tope es NULL");
+	pa2m_afirmar(!pila_desapilar(pi),
+		     "No se puede desapilar una lista vacia");
+	pa2m_afirmar(pila_tope(pi) == NULL, "Tope es NULL");
 	pa2m_afirmar(pila_vacia(pi), "Pila vacia");
-	pila_apilar(pi,&PRIMERO);
+	pila_apilar(pi, &PRIMERO);
 	pa2m_afirmar(pi != NULL, "Se apilo");
-	pila_apilar(pi,&SEGUNDO);
-	pila_apilar(pi,&TERCERO);
+	pila_apilar(pi, &SEGUNDO);
+	pila_apilar(pi, &TERCERO);
 	pa2m_afirmar(pila_tope(pi) == &TERCERO, "Tope es TERCERO");
 	pa2m_afirmar(!pila_vacia(pi), "Pila no vacia");
 	pa2m_afirmar(pila_desapilar(pi) != NULL, "Desapilado");
@@ -331,6 +342,25 @@ void funciones_pila()
 }
 void funciones_cola()
 {
+	char PRIMERO = 'A';
+	char SEGUNDO = 'B';
+	char TERCERO = 'C';
+	cola_t *co = cola_crear();
+	pa2m_afirmar(co != NULL, "Se creo la Cola");
+	pa2m_afirmar(!cola_desencolar(co),
+		     "No se puede desencolar una lista vacia");
+	pa2m_afirmar(cola_frente(co) == NULL, "Tope es NULL");
+	pa2m_afirmar(cola_vacia(co), "Cola vacia");
+	cola_encolar(co, &PRIMERO);
+	pa2m_afirmar(co != NULL, "Se emcolo");
+	cola_encolar(co, &SEGUNDO);
+	cola_encolar(co, &TERCERO);
+	pa2m_afirmar(cola_frente(co) == &PRIMERO, "Tope es PRIMERO");
+	pa2m_afirmar(!cola_vacia(co), "Cola no vacia");
+	pa2m_afirmar(cola_desencolar(co) != NULL, "Desapilado");
+	pa2m_afirmar(cola_frente(co) == &SEGUNDO, "Tope es SEGUNDO");
+
+	cola_destruir(co);
 }
 int main()
 {
