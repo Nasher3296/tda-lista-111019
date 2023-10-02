@@ -27,7 +27,7 @@ cola_t *cola_encolar(cola_t *cola, void *elemento)
  */
 void *cola_desencolar(cola_t *cola)
 {
-	return lista_quitar_de_posicion((lista_t *)cola,0); //O(1)
+	return lista_quitar_de_posicion((lista_t *)cola, 0); //O(1)
 }
 /**
  * Devuelve el elemento en el tope de la cola o NULL en caso de que no exista.
