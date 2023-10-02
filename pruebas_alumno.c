@@ -7,7 +7,7 @@
 
 void li_insertar()
 {
-		a2m_nuevo_grupo(
+	pa2m_nuevo_grupo(
 		"\n===================== Insert ordenado =====================");
 	char PRIMERO = 'A';
 	char SEGUNDO = 'B';
@@ -78,7 +78,7 @@ void li_insertar()
 
 void li_insertar_entre()
 {
-	a2m_nuevo_grupo(
+	pa2m_nuevo_grupo(
 		"\n===================== Inserto desordenado =====================");
 	char PRIMERO = 'A';
 	char SEGUNDO = 'B';
@@ -226,6 +226,74 @@ void li_buscar_elemento_y_demas()
 	lista_destruir_todo(li,NULL);
 }
 
+void li_iterador_externo()
+{
+	pa2m_nuevo_grupo(
+		"\n===================== Iterador externo =====================");
+	char PRIMERO = 'A';
+	char SEGUNDO = 'B';
+	char TERCERO = 'C';
+
+	
+	pa2m_afirmar(lista_iterador_crear(NULL) == NULL, "No creo iterador sin lista");
+	
+	lista_t *li = lista_crear();
+
+	lista_iterador_t *it = lista_iterador_crear(li);
+	pa2m_afirmar(it != NULL, "Creo iterador");
+	pa2m_afirmar(!lista_iterador_tiene_siguiente(it), "No tiene siguiente");
+	pa2m_afirmar(!lista_iterador_avanzar(it), "No avanza");
+
+	lista_iterador_destruir(it);
+
+
+	lista_insertar_en_posicion(li, &PRIMERO, 0);
+	lista_insertar_en_posicion(li, &SEGUNDO, 1);
+	lista_insertar_en_posicion(li, &TERCERO, 10);
+
+	it = lista_iterador_crear(li);
+	
+	pa2m_afirmar(lista_iterador_tiene_siguiente(it), "Tiene siguiente");
+	pa2m_afirmar(lista_iterador_avanzar(it), "Avanza");
+	pa2m_afirmar(lista_iterador_elemento_actual(it) == &SEGUNDO, "Muestra el elemento actual correcto");
+	pa2m_afirmar(lista_iterador_tiene_siguiente(it), "Tiene siguiente");
+	pa2m_afirmar(lista_iterador_avanzar(it), "Avanza");
+	pa2m_afirmar(lista_iterador_tiene_siguiente(it), "Tiene siguiente");
+	pa2m_afirmar(!lista_iterador_avanzar(it), "No avanza");
+	pa2m_afirmar(!lista_iterador_tiene_siguiente(it), "No tiene siguiente");
+	
+	lista_destruir(li);
+	lista_iterador_destruir(it);
+}
+
+bool li_iterador_interno_funcion_return(void *e, void* r)
+{
+	return r ;
+}
+
+void li_iterador_interno()
+{
+	pa2m_nuevo_grupo(
+		"\n===================== Iterador interno =====================");
+	char PRIMERO = 'A';
+	char SEGUNDO = 'B';
+	char TERCERO = 'C';
+
+	
+	lista_t *li = lista_crear();
+
+	lista_insertar_en_posicion(li, &PRIMERO, 0);
+	lista_insertar_en_posicion(li, &SEGUNDO, 1);
+	lista_insertar_en_posicion(li, &TERCERO, 10);
+
+	int tr = 1;
+
+	pa2m_afirmar(!lista_con_cada_elemento(li,NULL,NULL), "El iterador interno no itera ninguno si no hay funcion");
+	pa2m_afirmar(lista_con_cada_elemento(li,li_iterador_interno_funcion_return,NULL) == 1, "El iterador interno itera hasta el primero");
+	pa2m_afirmar(lista_con_cada_elemento(li,li_iterador_interno_funcion_return,&tr) == 3, "El iterador interno itera hasta el ultimo");
+	
+	lista_destruir(li);
+}
 
 void funciones_lista()
 {
@@ -235,7 +303,10 @@ void funciones_lista()
 	// li_quitar_uno();
 	// li_quitar_en_fn();
 	// li_eliminar_desordenado();
-	li_buscar_elemento_y_demas();
+	// li_buscar_elemento_y_demas();
+	// li_iterador_externo();
+	// li_iterador_interno();
+
 }
 void funciones_pila()
 {
