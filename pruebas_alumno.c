@@ -310,6 +310,24 @@ void funciones_lista()
 }
 void funciones_pila()
 {
+	char PRIMERO = 'A';
+	char SEGUNDO = 'B';
+	char TERCERO = 'C';
+	pila_t *pi = pila_crear();
+	pa2m_afirmar(pi != NULL, "Se creo la pila");
+	pa2m_afirmar(!pila_desapilar(pi), "No se puede desapilar una lista vacia");
+	pa2m_afirmar(pila_tope(pi)==NULL, "Tope es NULL");
+	pa2m_afirmar(pila_vacia(pi), "Pila vacia");
+	pila_apilar(pi,&PRIMERO);
+	pa2m_afirmar(pi != NULL, "Se apilo");
+	pila_apilar(pi,&SEGUNDO);
+	pila_apilar(pi,&TERCERO);
+	pa2m_afirmar(pila_tope(pi) == &TERCERO, "Tope es TERCERO");
+	pa2m_afirmar(!pila_vacia(pi), "Pila no vacia");
+	pa2m_afirmar(pila_desapilar(pi) != NULL, "Desapilado");
+	pa2m_afirmar(pila_tope(pi) == &SEGUNDO, "Tope es SEGUNDO");
+
+	pila_destruir(pi);
 }
 void funciones_cola()
 {
