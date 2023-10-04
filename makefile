@@ -10,10 +10,9 @@ valgrind-chanutron: pruebas_chanutron
 pruebas_chanutron: src/*.c pruebas_chanutron.o
 	$(CC) $(CFLAGS) src/*.c pruebas_chanutron.o -o pruebas_chanutron
 
-
 valgrind-alumno: pruebas_alumno
 	valgrind $(VALGRIND_FLAGS) ./pruebas_alumno
-
+	
 pruebas_alumno: src/*.c pruebas_alumno.c
 	$(CC) $(CFLAGS) src/*.c pruebas_alumno.c -o pruebas_alumno
 
